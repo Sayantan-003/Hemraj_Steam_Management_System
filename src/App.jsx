@@ -1,35 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {useState} from 'react';
+
+//Css import
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+//Component Import
+import Navbar from "../src/components/navbar/Navbar.jsx";
+import DateSelector from '../src/components/DateSelector/DateSelector.jsx';
+import SolventReport1 from './components/SolventReport/SolventReport1.jsx';
+import PerpReport from './components/PrepReport/PrepReport.jsx'
+
+const App = () => {
+  const [selectedDate, setSelectedDate] = useState("");
+  const handleDateChange = (data) => {
+     console.log('Selected:', data);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      <Navbar/>
+      <div className="h-60 mt-6 pt-1 rounded-0.5xl bg-gray-100 flex items-center justify-center">
+       <DateSelector onChange={handleDateChange} />
+     </div>
+     <PerpReport/>
+     <SolventReport1 />
+     </BrowserRouter>
+  );
 }
 
 export default App
