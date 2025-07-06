@@ -9,6 +9,7 @@ import Navbar from "../src/components/navbar/Navbar.jsx";
 import DateSelector from '../src/components/DateSelector/DateSelector.jsx';
 import SolventReport1 from './components/SolventReport/SolventReport1.jsx';
 import PerpReport from './components/PrepReport/PrepReport.jsx'
+import Footer from './components/Footer/Footer.jsx';
 
 const App = () => {
   const [selectedDate, setSelectedDate] = useState("");
@@ -24,6 +25,7 @@ const App = () => {
      </div>
      <PerpReport/>
      <SolventReport1 />
+     <Footer/>
      </BrowserRouter>
   );
 }
