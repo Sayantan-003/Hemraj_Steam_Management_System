@@ -4,13 +4,13 @@ A modern, professional web application for real-time monitoring, analytics, and 
 
 ## Features
 
-- 📊 **Dashboard:** Real-time KPIs and system health overview
-- 📅 **Date & Range Selectors:** Flexible reporting by date or range
-- 📈 **Reports & Analytics:** Visualize performance, consumption, and trends
-- 👥 **Operator & Shift Filters:** Drill down by operator, shift, or time
-- 📥 **Export & Download:** Export reports and analytics in various formats
-- ⚡ **Responsive UI:** Clean, modern, and mobile-friendly design
-- 🔒 **Secure:** Built with best practices for authentication and data safety
+-  **Dashboard:** Real-time KPIs and system health overview
+-  **Date & Range Selectors:** Flexible reporting by date or range
+-  **Reports & Analytics:** Visualize performance, consumption, and trends
+-  **Operator & Shift Filters:** Drill down by operator, shift, or time
+-  **Export & Download:** Export reports and analytics in various formats
+-  **Responsive UI:** Clean, modern, and mobile-friendly design
+-  **Secure:** Built with best practices for authentication and data safety
 
 ## Tech Stack
 
