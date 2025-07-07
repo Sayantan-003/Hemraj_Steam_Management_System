@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { TrendingUp, BarChart3, Calendar, Download, RefreshCw, Activity } from 'lucide-react';
-import DateSelector from '../DateSelector/DateSelector';
 
-const RefineryOverallReport = () => {
+
+const AlphaSectionReport = () => {
   const [parameters, setParameters] = useState([
     { name: 'Steam Consumed', value: '20.57 Ton' },
-    { name: 'Electric Consumed (WBSECDL)', value: '2500 units' },
-    { name: 'Electric Consumed (Solar)', value: '1000 units' },
     { name: 'Total Production', value: '682 mT' }
   ]);
   const [charts, setCharts] = useState([
@@ -38,7 +36,7 @@ const RefineryOverallReport = () => {
   ]);
   const [loading, setLoading] = useState(false);
 
-  const fetchSolventData = async ({ type, value }) => {
+  const fetchAlphaSectionData = async ({ type, value }) => {
     setLoading(true);
     try {
       let url = '';
@@ -80,7 +78,7 @@ const RefineryOverallReport = () => {
                 <Activity className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Solvent Report</h1>
+                <h1 className="text-3xl font-bold text-gray-900">Alpha Section Report</h1>
                 
               </div>
             </div>
@@ -273,4 +271,4 @@ const RefineryOverallReport = () => {
   );
 };
 
-export default RefineryOverallReport;
+export default AlphaSectionReport;
