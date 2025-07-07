@@ -1,0 +1,279 @@
+import React, { useEffect, useState } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { TrendingUp, BarChart3, Calendar, Download, RefreshCw, Activity } from 'lucide-react';
+import DateSelector from '../DateSelector/DateSelector';
+
+const SolventReport = () => {
+  const [parameters, setParameters] = useState([
+    { name: 'Crude Oil Color', value: '32' },
+    { name: 'Crude Oil Moisture', value: '0.25%' },
+    { name: 'DORB Oil Moisture %', value: '11.30' },
+    { name: 'Steam Consumed', value: '20.57 Ton' },
+    { name: 'Electric Consumed (WBSECDL)', value: '2500 units' },
+    { name: 'Electric Consumed (Solar)', value: '1000 units' },
+    { name: 'Total Production', value: '682 mT' }
+  ]);
+  const [charts, setCharts] = useState([
+    [
+      { name: '00:00', value: 85 },
+      { name: '04:00', value: 87 },
+      { name: '08:00', value: 92 },
+      { name: '12:00', value: 89 },
+      { name: '16:00', value: 94 },
+      { name: '20:00', value: 91 }
+    ],
+    [
+      { name: 'Mon', value: 78 },
+      { name: 'Tue', value: 82 },
+      { name: 'Wed', value: 85 },
+      { name: 'Thu', value: 79 },
+      { name: 'Fri', value: 88 },
+      { name: 'Sat', value: 84 }
+    ],
+    [
+      { name: 'Jan', value: 145 },
+      { name: 'Feb', value: 152 },
+      { name: 'Mar', value: 138 },
+      { name: 'Apr', value: 161 },
+      { name: 'May', value: 147 },
+      { name: 'Jun', value: 155 }
+    ]
+  ]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchSolventData = async ({ type, value }) => {
+    setLoading(true);
+    try {
+      let url = '';
+
+      if (type === 'date' && value) {
+        const dateStr = value.toISOString().split('T')[0];
+        url = `/api/solvent?date=${dateStr}`;
+      } else if (type === 'range' && value?.start && value?.end) {
+        const startStr = value.start.toISOString().split('T')[0];
+        const endStr = value.end.toISOString().split('T')[0];
+        url = `/api/solvent?start=${startStr}&end=${endStr}`;
+      } else {
+        setLoading(false);
+        return;
+      }
+
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // const res = await fetch(url);
+      // const json = await res.json();
+      // setParameters(json.parameters || []);
+      // setCharts(json.charts || [[], [], []]);
+    } catch (error) {
+      console.error('Failed to load data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 mt-25">
+      {/* Header Section */}
+      <div className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="p-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg">
+                <Activity className="h-8 w-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">Solvent Report</h1>
+                
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-3 mt-4 lg:mt-0">
+              <button className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+                <RefreshCw className="h-4 w-4" />
+                <span>Refresh</span>
+              </button>
+              <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors duration-200">
+                <Download className="h-4 w-4" />
+                <span>Export</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {loading ? (
+          <div className="flex items-center justify-center p-12">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p className="text-gray-600 font-medium">Loading data...</p>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            {/* Parameters Table */}
+            <div className="xl:col-span-1">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
+                  <div className="flex items-center space-x-2">
+                    <BarChart3 className="h-5 w-5 text-white" />
+                    <h3 className="text-lg font-semibold text-white">Performance Parameters</h3>
+                  </div>
+                </div>
+                
+                <div className="divide-y divide-gray-200">
+                  {parameters.map((param, idx) => (
+                    <div key={idx} className="px-6 py-4 hover:bg-gray-50 transition-colors duration-200">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">{param.name}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-lg font-bold text-blue-600">{param.value}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Charts Section */}
+            <div className="xl:col-span-2 space-y-8">
+              {/* Chart 1 */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div className="flex items-center space-x-2 mb-6">
+                  <TrendingUp className="h-5 w-5 text-blue-600" />
+                  <h3 className="text-lg font-semibold text-gray-900">Operator wise Production Performance</h3>
+                </div>
+                <ResponsiveContainer width="100%" height={280}>
+                  <LineChart data={charts[0]}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis 
+                      dataKey="name" 
+                      stroke="#6b7280"
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis 
+                      stroke="#6b7280"
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <Tooltip 
+                      contentStyle={{
+                        backgroundColor: '#fff',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '8px',
+                        boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                      }}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="value" 
+                      stroke="#3b82f6" 
+                      strokeWidth={3} 
+                      dot={{ r: 5, fill: '#3b82f6' }}
+                      activeDot={{ r: 7, fill: '#1d4ed8' }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Chart 2 */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                  <div className="flex items-center space-x-2 mb-6">
+                    <TrendingUp className="h-5 w-5 text-emerald-600" />
+                    <h3 className="text-lg font-semibold text-gray-900">Operator Wise Steam Consumption</h3>
+                  </div>
+                  <ResponsiveContainer width="100%" height={250}>
+                    <LineChart data={charts[1]}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis 
+                        dataKey="name" 
+                        stroke="#6b7280"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                      />
+                      <YAxis 
+                        stroke="#6b7280"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                      />
+                      <Tooltip 
+                        contentStyle={{
+                          backgroundColor: '#fff',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '8px',
+                          boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                        }}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="value" 
+                        stroke="#10b981" 
+                        strokeWidth={3} 
+                        dot={{ r: 5, fill: '#10b981' }}
+                        activeDot={{ r: 7, fill: '#047857' }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Chart 3 */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                  <div className="flex items-center space-x-2 mb-6">
+                    <TrendingUp className="h-5 w-5 text-purple-600" />
+                    <h3 className="text-lg font-semibold text-gray-900">Operator Wise Electric Consumption</h3>
+                  </div>
+                  <ResponsiveContainer width="100%" height={250}>
+                    <LineChart data={charts[2]}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis 
+                        dataKey="name" 
+                        stroke="#6b7280"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                      />
+                      <YAxis 
+                        stroke="#6b7280"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                      />
+                      <Tooltip 
+                        contentStyle={{
+                          backgroundColor: '#fff',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '8px',
+                          boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                        }}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="value" 
+                        stroke="#8b5cf6" 
+                        strokeWidth={3} 
+                        dot={{ r: 5, fill: '#8b5cf6' }}
+                        activeDot={{ r: 7, fill: '#7c3aed' }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default SolventReport;
