@@ -10,7 +10,7 @@ import DateSelector from '../src/components/DateSelector/DateSelector.jsx';
 import SolventReport1 from './components/SolventReport/SolventReport1.jsx';
 import PrepReport from './components/PrepReport/PrepReport.jsx';
 import Footer from './components/Footer/Footer.jsx';
-import DeGummingSection from './components/RefineryReport/DeGummingSection';
+import DeGummingSectionReport from './components/RefineryReport/DeGummingSection';
 import RefineryTotalProduction from './components/RefineryReport/RefineryTotalProduction';
 
 const App = () => {
