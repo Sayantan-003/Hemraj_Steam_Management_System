@@ -1,12 +1,74 @@
-# React + Vite
+# Hemraj Steam Management System (HSMS)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, professional web application for real-time monitoring, analytics, and management of industrial steam systems.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 📊 **Dashboard:** Real-time KPIs and system health overview
+- 📅 **Date & Range Selectors:** Flexible reporting by date or range
+- 📈 **Reports & Analytics:** Visualize performance, consumption, and trends
+- 👥 **Operator & Shift Filters:** Drill down by operator, shift, or time
+- 📥 **Export & Download:** Export reports and analytics in various formats
+- ⚡ **Responsive UI:** Clean, modern, and mobile-friendly design
+- 🔒 **Secure:** Built with best practices for authentication and data safety
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Frontend:** React, Vite, Tailwind CSS
+- **Icons:** Lucide React
+- **Routing:** React Router DOM
+- **Charts:** Recharts
+
+## Getting Started
+
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/Sayantan-003/Hemraj_Steam_Management_System
+   cd HSMS
+   ```
+2. **Install dependencies:**
+   ```sh
+   npm install
+   # If you encounter issues, install dependencies explicitly:
+   npm install react@^19.1.0 react-dom@^19.1.0 react-router-dom@^7.6.3
+   npm install -D @eslint/js@^9.29.0 @types/react@^19.1.8 @types/react-dom@^19.1.6 @vitejs/plugin-react-swc@^3.10.2 eslint@^9.29.0 eslint-plugin-react-hooks@^5.2.0 eslint-plugin-react-refresh@^0.4.20 globals@^16.2.0 vite@^7.0.0
+   ```
+3. **Start the development server:**
+   ```sh
+   npm run dev
+   ```
+4. **Open your browser:**
+   Visit [http://localhost:5173](http://localhost:5173)
+
+## Project Structure
+
+```
+HSMS/
+├── public/
+├── src/
+│   ├── assets/
+│   ├── components/
+│   │   ├── navbar/
+│   │   ├── Footer/
+│   │   ├── DateSelector/
+│   │   ├── SolventReport/
+│   │   └── PrepReport/
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── ...
+├── package.json
+└── README.md
+```
+
+## Customization
+- Update company info, contact details, and social links in `Footer.jsx`.
+- Add or modify reports and analytics in the respective components.
+
+## Contributing
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+[MIT](LICENSE)
+
+---
+© Hemraj Steam Management. All rights reserved.
