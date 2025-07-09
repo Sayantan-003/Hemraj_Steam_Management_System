@@ -14,28 +14,42 @@ import DeGummingAndBleachingoSectionReport from './components/RefineryReport/DeG
 import AlphaSectionReport from './components/RefineryReport/AlphaSectionReport.jsx';
 import DeWaxingSectionReport from './components/RefineryReport/DeWaxingSectionReport.jsx';
 import DEOSectionReport from './components/RefineryReport/DEOSectionReport.jsx';
-// import RefineryTotalProduction from '../src/components/RefineryReport/RefineryTotalProduction.jsx';
+import PerpFormPage from '../src/pages/PrepFormPage.jsx';
+
+
 
 const App = () => {
-  const [selectedDate, setSelectedDate] = useState("");
-  const handleDateChange = (data) => {
-     console.log('Selected:', data);
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
   };
 
   return (
     <BrowserRouter>
-      <Navbar/>
-      <div className="h-60 mt-6 pt-1 rounded-0.5xl bg-linear-to-r from to-blue-100 to bg-blue-50 flex items-center justify-center rounded-ms">
-       <DateSelector onChange={handleDateChange} />
-     </div>
-     <PrepReport/>
-     <SolventReport1/>
-     <DeGummingAndBleachingoSectionReport/>
-     <AlphaSectionReport/>
-     <DeWaxingSectionReport/>
-     <DEOSectionReport/>
-     <Footer/>
-     </BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div>
+              <div className="h-60 mt-6 pt-1 bg-gradient-to-r from-blue-100 to-blue-50 flex items-center justify-center rounded-md">
+                <DateSelector onChange={handleDateChange} />
+              </div>
+              <PrepReport />
+              <SolventReport1 />
+              <DeGummingAndBleachingoSectionReport />
+              <AlphaSectionReport />
+              <DeWaxingSectionReport />
+              <DEOSectionReport />
+            </div>
+          }
+        />
+        <Route path="/prep-form" element={<PerpFormPage />} />
+      </Routes>
+      <Footer />
+    </BrowserRouter>
   );
 }
-export default App
+
+export default App;
