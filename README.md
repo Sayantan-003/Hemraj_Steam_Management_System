@@ -24,7 +24,7 @@ A modern, professional web application for real-time monitoring, analytics, and 
 1. **Clone the repository:**
    ```sh
    git clone https://github.com/Sayantan-003/Hemraj_Steam_Management_System
-
+   ```
 2. **Navigate to the directory: **  
    ```sh
    cd Hemraj_Steam_Management_System
