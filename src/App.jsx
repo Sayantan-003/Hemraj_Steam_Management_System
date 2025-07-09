@@ -15,7 +15,7 @@ import AlphaSectionReport from './components/RefineryReport/AlphaSectionReport.j
 import DeWaxingSectionReport from './components/RefineryReport/DeWaxingSectionReport.jsx';
 import DEOSectionReport from './components/RefineryReport/DEOSectionReport.jsx';
 // import RefineryTotalProduction from '../src/components/RefineryReport/RefineryTotalProduction.jsx';
-
+import SolventFormPage from '../src/pages/SolventFormPage.jsx';
 const App = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const handleDateChange = (data) => {
@@ -25,15 +25,23 @@ const App = () => {
   return (
     <BrowserRouter>
       <Navbar/>
+      
+     <Routes>
+      <Route path="/" element={
+        <>
       <div className="h-60 mt-6 pt-1 rounded-0.5xl bg-linear-to-r from to-blue-100 to bg-blue-50 flex items-center justify-center rounded-ms">
        <DateSelector onChange={handleDateChange} />
-     </div>
-     <PrepReport/>
-     <SolventReport1/>
-     <DeGummingAndBleachingoSectionReport/>
-     <AlphaSectionReport/>
-     <DeWaxingSectionReport/>
-     <DEOSectionReport/>
+      </div>
+          <PrepReport/>
+          <SolventReport1/>
+          <DeGummingAndBleachingoSectionReport/>
+          <AlphaSectionReport/>
+          <DeWaxingSectionReport/>
+          <DEOSectionReport/>
+        </>
+      } />
+      <Route path="/solvent-form" element={<SolventFormPage/>} />
+    </Routes>
      <Footer/>
      </BrowserRouter>
   );
