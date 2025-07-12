@@ -16,6 +16,7 @@ import DeWaxingSectionReport from './components/RefineryReport/DeWaxingSectionRe
 import DEOSectionReport from './components/RefineryReport/DEOSectionReport.jsx';
 import PerpFormPage from './pages/PrepFormPage.jsx';
 import SolventFormPage from './pages/SolventFormPage.jsx';
+import RefineryFormPage from './pages/RefineryFormPage.jsx';
 
 const App = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -46,6 +47,7 @@ const App = () => {
         />
         <Route path="/prep-form" element={<PerpFormPage />} />
         <Route path="/solvent-form" element={<SolventFormPage />} />
+        <Route path="/refinery-form" element={<RefineryFormPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
