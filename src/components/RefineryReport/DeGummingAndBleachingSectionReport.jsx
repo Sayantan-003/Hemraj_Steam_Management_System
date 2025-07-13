@@ -3,35 +3,37 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { TrendingUp, BarChart3 , Download, RefreshCw, Activity } from 'lucide-react';
 
 
+
 const DeGummingAndBleachingSectionReport = () => {
   const [parameters, setParameters] = useState([
-    { name: 'Steam Consumed', value: '20.57 Ton' },
-    { name: 'Total Production', value: '682 mT' }
+    { name: 'Total Production', value: '542 mT' },
+    { name: 'Steam Consumed', value: '18.42 Ton' },
+    { name: 'Unit Consumed', value: '850 unit' },
   ]);
   const [charts, setCharts] = useState([
     [
-      { name: '00:00', value: 85 },
-      { name: '04:00', value: 87 },
-      { name: '08:00', value: 92 },
-      { name: '12:00', value: 89 },
-      { name: '16:00', value: 94 },
-      { name: '20:00', value: 91 }
+      { name: '00:00', value: 82 },
+      { name: '04:00', value: 85 },
+      { name: '08:00', value: 89 },
+      { name: '12:00', value: 87 },
+      { name: '16:00', value: 91 },
+      { name: '20:00', value: 88 }
     ],
     [
-      { name: 'Mon', value: 78 },
-      { name: 'Tue', value: 82 },
-      { name: 'Wed', value: 85 },
-      { name: 'Thu', value: 79 },
-      { name: 'Fri', value: 88 },
-      { name: 'Sat', value: 84 }
+      { name: 'Mon', value: 75 },
+      { name: 'Tue', value: 79 },
+      { name: 'Wed', value: 82 },
+      { name: 'Thu', value: 76 },
+      { name: 'Fri', value: 85 },
+      { name: 'Sat', value: 81 }
     ],
     [
-      { name: 'Jan', value: 145 },
-      { name: 'Feb', value: 152 },
-      { name: 'Mar', value: 138 },
-      { name: 'Apr', value: 161 },
-      { name: 'May', value: 147 },
-      { name: 'Jun', value: 155 }
+      { name: 'Jan', value: 135 },
+      { name: 'Feb', value: 142 },
+      { name: 'Mar', value: 128 },
+      { name: 'Apr', value: 151 },
+      { name: 'May', value: 137 },
+      { name: 'Jun', value: 145 }
     ]
   ]);
   const [loading, setLoading] = useState(false);
@@ -43,11 +45,11 @@ const DeGummingAndBleachingSectionReport = () => {
 
       if (type === 'date' && value) {
         const dateStr = value.toISOString().split('T')[0];
-        url = `/api/solvent?date=${dateStr}`;
+        url = `/api/degumming-bleaching?date=${dateStr}`;
       } else if (type === 'range' && value?.start && value?.end) {
         const startStr = value.start.toISOString().split('T')[0];
         const endStr = value.end.toISOString().split('T')[0];
-        url = `/api/solvent?start=${startStr}&end=${endStr}`;
+        url = `/api/degumming-bleaching?start=${startStr}&end=${endStr}`;
       } else {
         setLoading(false);
         return;
@@ -67,6 +69,9 @@ const DeGummingAndBleachingSectionReport = () => {
     }
   };
 
+  const chartTitles = ['Total Production', 'Steam Used In Per Ton Production', 'Unit Used in Per Ton Production'];
+  const chartColors = ['#3b82f6', '#059669', '#7c3aed'];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 mt-25">
       {/* Header Section */}
@@ -78,8 +83,7 @@ const DeGummingAndBleachingSectionReport = () => {
                 <Activity className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">De-Gumming and Bleaching Section Report</h1>
-                
+                <h1 className="text-3xl font-bold text-gray-900">DeGumming and Bleaching Section Report</h1>
               </div>
             </div>
             
@@ -122,7 +126,7 @@ const DeGummingAndBleachingSectionReport = () => {
                     <div key={idx} className="px-6 py-4 hover:bg-gray-50 transition-colors duration-200">
                       <div className="flex justify-between items-center">
                         <div>
-                          <p className="text-sm font-medium text-gray-900">{param.name}</p>
+                          <p className="text-sm font-medium text-gray-500">{param.name}</p>
                         </div>
                         <div className="text-right">
                           <p className="text-lg font-bold text-blue-600">{param.value}</p>
@@ -140,40 +144,22 @@ const DeGummingAndBleachingSectionReport = () => {
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <div className="flex items-center space-x-2 mb-6">
                   <TrendingUp className="h-5 w-5 text-blue-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">Total Production </h3>
+                  <h3 className="text-lg font-semibold text-gray-900">{chartTitles[0]}</h3>
                 </div>
                 <ResponsiveContainer width="100%" height={280}>
                   <LineChart data={charts[0]}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                    <XAxis 
-                      dataKey="name" 
-                      stroke="#6b7280"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <YAxis 
-                      stroke="#6b7280"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <Tooltip 
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={1} />
+                    <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+                    <YAxis fontSize={12} tickLine={false} axisLine={false} />
+                    <Tooltip
                       contentStyle={{
                         backgroundColor: '#fff',
                         border: '1px solid #e5e7eb',
                         borderRadius: '8px',
-                        boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                       }}
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="value" 
-                      stroke="#3b82f6" 
-                      strokeWidth={3} 
-                      dot={{ r: 5, fill: '#3b82f6' }}
-                      activeDot={{ r: 7, fill: '#1d4ed8' }}
-                    />
+                    <Line type="monotone" dataKey="value" stroke={chartColors[0]} strokeWidth={3} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -182,41 +168,23 @@ const DeGummingAndBleachingSectionReport = () => {
                 {/* Chart 2 */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center space-x-2 mb-6">
-                    <TrendingUp className="h-5 w-5 text-emerald-600" />
-                    <h3 className="text-lg font-semibold text-gray-900">Steam Used In Per Ton Production</h3>
+                    <TrendingUp className="h-5 w-5 text-blue-600" />
+                    <h3 className="text-lg font-semibold text-gray-900">{chartTitles[1]}</h3>
                   </div>
                   <ResponsiveContainer width="100%" height={250}>
                     <LineChart data={charts[1]}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis 
-                        dataKey="name" 
-                        stroke="#6b7280"
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <YAxis 
-                        stroke="#6b7280"
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <Tooltip 
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={1}  />
+                      <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+                      <YAxis fontSize={12} tickLine={false} axisLine={false} />
+                      <Tooltip
                         contentStyle={{
                           backgroundColor: '#fff',
                           border: '1px solid #e5e7eb',
                           borderRadius: '8px',
-                          boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                         }}
                       />
-                      <Line 
-                        type="monotone" 
-                        dataKey="value" 
-                        stroke="#10b981" 
-                        strokeWidth={3} 
-                        dot={{ r: 5, fill: '#10b981' }}
-                        activeDot={{ r: 7, fill: '#047857' }}
-                      />
+                      <Line type="monotone" dataKey="value" stroke={chartColors[1]} strokeWidth={3} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -224,41 +192,23 @@ const DeGummingAndBleachingSectionReport = () => {
                 {/* Chart 3 */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center space-x-2 mb-6">
-                    <TrendingUp className="h-5 w-5 text-purple-600" />
-                    <h3 className="text-lg font-semibold text-gray-900">Unit Used in Per Ton Production</h3>
+                    <TrendingUp className="h-5 w-5 text-blue-600" />
+                    <h3 className="text-lg font-semibold text-gray-900">{chartTitles[2]}</h3>
                   </div>
                   <ResponsiveContainer width="100%" height={250}>
                     <LineChart data={charts[2]}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis 
-                        dataKey="name" 
-                        stroke="#6b7280"
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <YAxis 
-                        stroke="#6b7280"
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <Tooltip 
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={1}  />
+                      <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+                      <YAxis fontSize={12} tickLine={false} axisLine={false} />
+                      <Tooltip
                         contentStyle={{
                           backgroundColor: '#fff',
                           border: '1px solid #e5e7eb',
                           borderRadius: '8px',
-                          boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                         }}
                       />
-                      <Line 
-                        type="monotone" 
-                        dataKey="value" 
-                        stroke="#8b5cf6" 
-                        strokeWidth={3} 
-                        dot={{ r: 5, fill: '#8b5cf6' }}
-                        activeDot={{ r: 7, fill: '#7c3aed' }}
-                      />
+                      <Line type="monotone" dataKey="value" stroke={chartColors[2]} strokeWidth={3} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>

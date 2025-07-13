@@ -4,43 +4,45 @@ import { TrendingUp, BarChart3, Download, RefreshCw, Activity } from 'lucide-rea
 import DateSelector from '../DateSelector/DateSelector';
 import PrepReportFilters from '../PrepReport/PrepReportFilter';
 
+
 const PrepReport = () => {
   const [parameters, setParameters] = useState([
-  { name: 'Steam Consumed', value: '4912 KG' },
-  { name: 'Electric Consumed (WBSECDL)', value: '1156 units' },
-  { name: 'Electric Consumed (Solar)', value: '1110 units' },
-  { name: 'Total Production', value: '970.29 MT' }
+    { name: 'Steam Consumed', value: '4912 KG' },
+    { name: 'Electric Consumed (WBSECDL)', value: '1156 units' },
+    { name: 'Electric Consumed (Solar)', value: '1110 units' },
+    { name: 'Total Production', value: '970.29 MT' }
   ]);
   const [charts, setCharts] = useState([
-  [  { name: '00:00', value: 85 },
-    { name: '04:00', value: 87 },
-    { name: '08:00', value: 92 },
-    { name: '12:00', value: 89 },
-    { name: '16:00', value: 94 },
-    { name: '20:00', value: 91 }
-  ],
-  [
-    { name: 'Mon', value: 780 },
-    { name: 'Tue', value: 820 },
-    { name: 'Wed', value: 850 },
-    { name: 'Thu', value: 790 },
-    { name: 'Fri', value: 880 },
-    { name: 'Sat', value: 840 }
-  ],
-  [
-    { name: 'Jan', value: 1450 },
-    { name: 'Feb', value: 1520 },
-    { name: 'Mar', value: 1380 },
-    { name: 'Apr', value: 1610 },
-    { name: 'May', value: 1470 },
-    { name: 'Jun', value: 1550 }
-  ]
-]);
+    [
+      { name: '00:00', value: 85 },
+      { name: '04:00', value: 87 },
+      { name: '08:00', value: 92 },
+      { name: '12:00', value: 89 },
+      { name: '16:00', value: 94 },
+      { name: '20:00', value: 91 }
+    ],
+    [
+      { name: 'Mon', value: 780 },
+      { name: 'Tue', value: 820 },
+      { name: 'Wed', value: 850 },
+      { name: 'Thu', value: 790 },
+      { name: 'Fri', value: 880 },
+      { name: 'Sat', value: 840 }
+    ],
+    [
+      { name: 'Jan', value: 1450 },
+      { name: 'Feb', value: 1520 },
+      { name: 'Mar', value: 1380 },
+      { name: 'Apr', value: 1610 },
+      { name: 'May', value: 1470 },
+      { name: 'Jun', value: 1550 }
+    ]
+  ]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState({ operator: '', hours: '', shift: '' });
-  const [operators, setOperators] = useState([]);
-  const [shiftHours, setShiftHours] = useState([]);
-  const [shiftNames, setShiftNames] = useState([]);
+  const [operators, setOperators] = useState(['Operator A', 'Operator B', 'Operator C']);
+  const [shiftHours, setShiftHours] = useState(['8 hours', '12 hours', '24 hours']);
+  const [shiftNames, setShiftNames] = useState(['Day Shift', 'Night Shift', 'Rotating Shift']);
 
   const fetchPrepData = async ({ type, value }) => {
     setLoading(true);
@@ -60,11 +62,13 @@ const PrepReport = () => {
       if (filter.hours) url += `&hours=${filter.hours}`;
       if (filter.shift) url += `&shift=${filter.shift}`;
 
-      const res = await fetch(url);
-      const json = await res.json();
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-      setParameters(json.parameters || []);
-      setCharts(json.charts || [[], [], []]);
+      // const res = await fetch(url);
+      // const json = await res.json();
+      // setParameters(json.parameters || []);
+      // setCharts(json.charts || [[], [], []]);
     } catch (err) {
       console.error('Error loading Prep Report:', err);
     } finally {
@@ -75,22 +79,27 @@ const PrepReport = () => {
   useEffect(() => {
     // Fetch dropdown values
     const fetchDropdowns = async () => {
-      const [opRes, hrRes, shiftRes] = await Promise.all([
-        fetch('/api/prep/operators'),
-        fetch('/api/prep/shifthours'),
-        fetch('/api/prep/shiftnames')
-      ]);
-      const [ops, hrs, shifts] = await Promise.all([
-        opRes.json(),
-        hrRes.json(),
-        shiftRes.json()
-      ]);
-      setOperators(ops);
-      setShiftHours(hrs);
-      setShiftNames(shifts);
+      // Simulate API calls
+      await new Promise(resolve => setTimeout(resolve, 500));
+      // const [opRes, hrRes, shiftRes] = await Promise.all([
+      //   fetch('/api/prep/operators'),
+      //   fetch('/api/prep/shifthours'),
+      //   fetch('/api/prep/shiftnames')
+      // ]);
+      // const [ops, hrs, shifts] = await Promise.all([
+      //   opRes.json(),
+      //   hrRes.json(),
+      //   shiftRes.json()
+      // ]);
+      // setOperators(ops);
+      // setShiftHours(hrs);
+      // setShiftNames(shifts);
     };
     fetchDropdowns();
   }, []);
+
+  const chartTitles = ['Total Production', 'Steam Used In Per Ton Production', 'Unit Used in Per Ton Production'];
+  const chartColors = ['#3b82f6', '#059669', '#7c3aed'];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 mt-25">
@@ -108,12 +117,12 @@ const PrepReport = () => {
             <div className="flex items-center space-x-3 mt-4 lg:mt-0">
               <button
                 onClick={() => fetchPrepData({ type: 'date', value: new Date() })}
-                className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200"
               >
                 <RefreshCw className="h-4 w-4" />
                 <span>Refresh</span>
               </button>
-              <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
+              <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors duration-200">
                 <Download className="h-4 w-4" />
                 <span>Export</span>
               </button>
@@ -132,14 +141,15 @@ const PrepReport = () => {
         />
 
         {loading ? (
-          <div className="flex justify-center py-20">
+          <div className="flex items-center justify-center p-12">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading data...</p>
+              <p className="text-gray-600 font-medium">Loading data...</p>
             </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            {/* Parameters Table */}
             <div className="xl:col-span-1">
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
@@ -150,10 +160,14 @@ const PrepReport = () => {
                 </div>
                 <div className="divide-y divide-gray-200">
                   {parameters.map((param, idx) => (
-                    <div key={idx} className="px-6 py-4 hover:bg-gray-50">
-                      <div className="flex justify-between">
-                        <p className="text-sm font-medium text-gray-900">{param.name}</p>
-                        <p className="text-lg font-bold text-blue-600">{param.value}</p>
+                    <div key={idx} className="px-6 py-4 hover:bg-gray-50 transition-colors duration-200">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">{param.name}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-lg font-bold text-blue-600">{param.value}</p>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -161,17 +175,42 @@ const PrepReport = () => {
               </div>
             </div>
 
+            {/* Charts Section */}
             <div className="xl:col-span-2 space-y-8">
-              {charts.map((chartData, idx) => (
-                <div key={idx} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              {/* Chart 1 - Total Production */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div className="flex items-center space-x-2 mb-6">
+                  <TrendingUp className="h-5 w-5 text-blue-600" />
+                  <h3 className="text-lg font-semibold text-gray-900">{chartTitles[0]}</h3>
+                </div>
+                <ResponsiveContainer width="100%" height={280}>
+                  <LineChart data={charts[0]}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+                    <YAxis fontSize={12} tickLine={false} axisLine={false} />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: '#fff',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '8px',
+                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+                      }}
+                    />
+                    <Line type="monotone" dataKey="value" stroke={chartColors[0]} strokeWidth={3} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Charts 2 & 3 - Side by Side for Desktop */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Chart 2 - Steam Used In Per Ton Production */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center space-x-2 mb-6">
                     <TrendingUp className="h-5 w-5 text-blue-600" />
-                    <h3 className="text-lg font-semibold text-gray-900">Operator Wise
-                      {[' Production', ' Steam Consumed', ' Unit Consumed'][idx]} 
-                    </h3>
+                    <h3 className="text-lg font-semibold text-gray-900">{chartTitles[1]}</h3>
                   </div>
-                  <ResponsiveContainer width="100%" height={idx === 0 ? 280 : 250}>
-                    <LineChart data={chartData}>
+                  <ResponsiveContainer width="100%" height={250}>
+                    <LineChart data={charts[1]}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
                       <YAxis fontSize={12} tickLine={false} axisLine={false} />
@@ -183,11 +222,35 @@ const PrepReport = () => {
                           boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                         }}
                       />
-                      <Line type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={3} />
+                      <Line type="monotone" dataKey="value" stroke={chartColors[1]} strokeWidth={3} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
-              ))}
+
+                {/* Chart 3 - Unit Used in Per Ton Production */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                  <div className="flex items-center space-x-2 mb-6">
+                    <TrendingUp className="h-5 w-5 text-blue-600" />
+                    <h3 className="text-lg font-semibold text-gray-900">{chartTitles[2]}</h3>
+                  </div>
+                  <ResponsiveContainer width="100%" height={250}>
+                    <LineChart data={charts[2]}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+                      <YAxis fontSize={12} tickLine={false} axisLine={false} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: '#fff',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '8px',
+                          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+                        }}
+                      />
+                      <Line type="monotone" dataKey="value" stroke={chartColors[2]} strokeWidth={3} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -197,3 +260,4 @@ const PrepReport = () => {
 };
 
 export default PrepReport;
+
