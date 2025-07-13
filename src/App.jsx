@@ -27,12 +27,12 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <Navbar />
       <Routes>
         <Route
           path="/"
           element={
             <>
+              <Navbar />
               <div className="h-60 mt-6 pt-1 bg-gradient-to-r from-blue-100 to-blue-50 flex items-center justify-center rounded-md">
                 <DateSelector onChange={handleDateChange} />
               </div>
@@ -42,6 +42,7 @@ const App = () => {
               <AlphaSectionReport />
               <DeWaxingSectionReport />
               <DEOSectionReport />
+            <Footer />
             </>
           }
         />
@@ -49,7 +50,6 @@ const App = () => {
         <Route path="/solvent-form" element={<SolventFormPage />} />
         <Route path="/refinery-form" element={<RefineryFormPage />} />
       </Routes>
-      <Footer />
     </BrowserRouter>
   );
 };
