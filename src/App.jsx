@@ -18,6 +18,11 @@ import PerpFormPage from './pages/PrepFormPage.jsx';
 import SolventFormPage from './pages/SolventFormPage.jsx';
 import RefineryFormPage from './pages/RefineryFormPage.jsx';
 
+
+
+//Error Pages
+import NotFound404 from '../src/components/ErrorPages/NotFound404.jsx'
+
 const App = () => {
   const [selectedDate, setSelectedDate] = useState(null);
 
@@ -49,6 +54,7 @@ const App = () => {
         <Route path="/prep-form" element={<PerpFormPage />} />
         <Route path="/solvent-form" element={<SolventFormPage />} />
         <Route path="/refinery-form" element={<RefineryFormPage />} />
+        <Route path = '*' element={<NotFound404/>} />
       </Routes>
     </BrowserRouter>
   );
