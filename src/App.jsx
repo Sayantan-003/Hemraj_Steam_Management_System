@@ -14,6 +14,8 @@ import DeGummingAndBleachingoSectionReport from './components/RefineryReport/DeG
 import AlphaSectionReport from './components/RefineryReport/AlphaSectionReport.jsx';
 import DeWaxingSectionReport from './components/RefineryReport/DeWaxingSectionReport.jsx';
 import DEOSectionReport from './components/RefineryReport/DEOSectionReport.jsx';
+
+// Form Pages Import For diiferent sections
 import PerpFormPage from './pages/PrepFormPage.jsx';
 import SolventFormPage from './pages/SolventFormPage.jsx';
 import RefineryFormPage from './pages/RefineryFormPage.jsx';
