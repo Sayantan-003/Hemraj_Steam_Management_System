@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import DEOSectionReportFilter from './DEOSectionReportFilter';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { TrendingUp, BarChart3, Calendar, Download, RefreshCw, Activity } from 'lucide-react';
-
-import Filters from './Filters';
+import { TrendingUp, BarChart3 , Download, RefreshCw, Activity } from 'lucide-react';
 
 
-const SolventReport1 = () => {
+const DEOSectionReport = () => {
+  const [filter, setFilter] = useState({ operator: '', hours: '', shift: '' });
+  const [operators, setOperators] = useState([]);
+  const [shiftHours, setShiftHours] = useState([]);
+  const [shiftNames, setShiftNames] = useState([]);
   const [parameters, setParameters] = useState([
-    { name: 'Crude Oil Color', value: '32' },
-    { name: 'Crude Oil Moisture', value: '0.25%' },
-    { name: 'DORB Oil Moisture %', value: '11.30' },
     { name: 'Steam Consumed', value: '20.57 Ton' },
-    { name: 'Electric Consumed (WBSECDL)', value: '2500 units' },
-    { name: 'Electric Consumed (Solar)', value: '1000 units' },
     { name: 'Total Production', value: '682 mT' }
   ]);
   const [charts, setCharts] = useState([
@@ -43,7 +41,118 @@ const SolventReport1 = () => {
   ]);
   const [loading, setLoading] = useState(false);
 
-  const fetchSolventData = async ({ type, value }) => {
+  // Fetch dropdown options on mount
+  useEffect(() => {
+    const fetchDropdowns = async () => {
+      // Simulate API calls
+      await new Promise(resolve => setTimeout(resolve, 500));
+      // Replace with actual API calls
+      // const [opRes, hrRes, shiftRes] = await Promise.all([
+      //   fetch('/api/deo-section/operators'),
+      //   fetch('/api/deo-section/shifthours'),
+      //   fetch('/api/deo-section/shiftnames')
+      // ]);
+      // setOperators(await opRes.json());
+      // setShiftHours(await hrRes.json());
+      // setShiftNames(await shiftRes.json());
+      setOperators(['']);
+      setShiftHours(['']);
+      setShiftNames(['']);
+    };
+    fetchDropdowns();
+  }, []);
+
+  // Fetch filtered data when filter changes
+  useEffect(() => {
+    const fetchFilteredData = async () => {
+      setLoading(true);
+      try {
+        // Build query params
+        const params = [];
+        if (filter.operator) params.push(`operator=${encodeURIComponent(filter.operator)}`);
+        if (filter.hours) params.push(`hours=${encodeURIComponent(filter.hours)}`);
+        if (filter.shift) params.push(`shift=${encodeURIComponent(filter.shift)}`);
+        const query = params.length ? `?${params.join('&')}` : '';
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 700));
+        // const res = await fetch(`/api/deo-section${query}`);
+        // const json = await res.json();
+        // setParameters(json.parameters || []);
+        // setCharts(json.charts || [[], [], []]);
+        // Demo: filter locally
+        if (filter.operator || filter.hours || filter.shift) {
+          setParameters([
+            { name: 'Steam Consumed', value: '18.00 Ton' },
+            { name: 'Total Production', value: '600 mT' }
+          ]);
+          setCharts([
+            [
+              { name: '00:00', value: 80 },
+              { name: '04:00', value: 82 },
+              { name: '08:00', value: 85 },
+              { name: '12:00', value: 83 },
+              { name: '16:00', value: 88 },
+              { name: '20:00', value: 86 }
+            ],
+            [
+              { name: 'Mon', value: 70 },
+              { name: 'Tue', value: 75 },
+              { name: 'Wed', value: 78 },
+              { name: 'Thu', value: 72 },
+              { name: 'Fri', value: 80 },
+              { name: 'Sat', value: 77 }
+            ],
+            [
+              { name: 'Jan', value: 120 },
+              { name: 'Feb', value: 130 },
+              { name: 'Mar', value: 110 },
+              { name: 'Apr', value: 140 },
+              { name: 'May', value: 125 },
+              { name: 'Jun', value: 135 }
+            ]
+          ]);
+        } else {
+          setParameters([
+            { name: 'Steam Consumed', value: '20.57 Ton' },
+            { name: 'Total Production', value: '682 mT' }
+          ]);
+          setCharts([
+            [
+              { name: '00:00', value: 85 },
+              { name: '04:00', value: 87 },
+              { name: '08:00', value: 92 },
+              { name: '12:00', value: 89 },
+              { name: '16:00', value: 94 },
+              { name: '20:00', value: 91 }
+            ],
+            [
+              { name: 'Mon', value: 78 },
+              { name: 'Tue', value: 82 },
+              { name: 'Wed', value: 85 },
+              { name: 'Thu', value: 79 },
+              { name: 'Fri', value: 88 },
+              { name: 'Sat', value: 84 }
+            ],
+            [
+              { name: 'Jan', value: 145 },
+              { name: 'Feb', value: 152 },
+              { name: 'Mar', value: 138 },
+              { name: 'Apr', value: 161 },
+              { name: 'May', value: 147 },
+              { name: 'Jun', value: 155 }
+            ]
+          ]);
+        }
+      } catch (error) {
+        console.error('Failed to load filtered data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFilteredData();
+  }, [filter]);
+
+  const fetchDEOData = async ({ type, value }) => {
     setLoading(true);
     try {
       let url = '';
@@ -74,6 +183,9 @@ const SolventReport1 = () => {
     }
   };
 
+  const chartTitles = ['Total Production', 'Steam Used In Per Ton Production', 'Unit Used in Per Ton Production'];
+  const chartColors = ['#3b82f6', '#059669', '#7c3aed'];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 mt-25">
       {/* Header Section */}
@@ -85,7 +197,7 @@ const SolventReport1 = () => {
                 <Activity className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Solvent Report</h1>
+                <h1 className="text-3xl font-bold text-gray-900">DEO Section Report</h1>
                 
               </div>
             </div>
@@ -105,6 +217,13 @@ const SolventReport1 = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <DEOSectionReportFilter
+          operators={operators}
+          shiftHours={shiftHours}
+          shiftNames={shiftNames}
+          filter={filter}
+          setFilter={setFilter}
+        />
         {loading ? (
           <div className="flex items-center justify-center p-12">
             <div className="text-center">
@@ -123,13 +242,12 @@ const SolventReport1 = () => {
                     <h3 className="text-lg font-semibold text-white">Performance Parameters</h3>
                   </div>
                 </div>
-                
                 <div className="divide-y divide-gray-200">
                   {parameters.map((param, idx) => (
                     <div key={idx} className="px-6 py-4 hover:bg-gray-50 transition-colors duration-200">
                       <div className="flex justify-between items-center">
                         <div>
-                          <p className="text-sm font-medium text-gray-900">{param.name}</p>
+                          <p className="text-sm font-medium text-gray-500">{param.name}</p>
                         </div>
                         <div className="text-right">
                           <p className="text-lg font-bold text-blue-600">{param.value}</p>
@@ -140,14 +258,13 @@ const SolventReport1 = () => {
                 </div>
               </div>
             </div>
-
             {/* Charts Section */}
             <div className="xl:col-span-2 space-y-8">
-              {/* Chart 1 - Total Production */}
+              {/* Chart 1 */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <div className="flex items-center space-x-2 mb-6">
                   <TrendingUp className="h-5 w-5 text-blue-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">Total Production</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">{chartTitles[0]}</h3>
                 </div>
                 <ResponsiveContainer width="100%" height={280}>
                   <LineChart data={charts[0]}>
@@ -162,22 +279,20 @@ const SolventReport1 = () => {
                         boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                       }}
                     />
-                    <Line type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={2.5} />
+                    <Line type="monotone" dataKey="value" stroke={chartColors[0]} strokeWidth={3} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-
-              {/* Charts 2 & 3 - Side by Side for Desktop */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Chart 2 - Steam Used In Per Ton Production */}
+                {/* Chart 2 */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center space-x-2 mb-6">
                     <TrendingUp className="h-5 w-5 text-blue-600" />
-                    <h3 className="text-lg font-semibold text-gray-900">Steam Used In Per Ton Production</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">{chartTitles[1]}</h3>
                   </div>
                   <ResponsiveContainer width="100%" height={250}>
                     <LineChart data={charts[1]}>
-                      <CartesianGrid strokeDasharray="3 3" />
+                      <CartesianGrid strokeDasharray="3 3" stroke='#e8e2f0' />
                       <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
                       <YAxis fontSize={12} tickLine={false} axisLine={false} />
                       <Tooltip
@@ -188,20 +303,19 @@ const SolventReport1 = () => {
                           boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                         }}
                       />
-                      <Line type="monotone" dataKey="value" stroke="#059669" strokeWidth={2.5} />
+                      <Line type="monotone" dataKey="value" stroke={chartColors[1]} strokeWidth={3} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
-
-                {/* Chart 3 - Unit Used in Per Ton Production */}
+                {/* Chart 3 */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center space-x-2 mb-6">
                     <TrendingUp className="h-5 w-5 text-blue-600" />
-                    <h3 className="text-lg font-semibold text-gray-900">Unit Used in Per Ton Production</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">{chartTitles[2]}</h3>
                   </div>
                   <ResponsiveContainer width="100%" height={250}>
                     <LineChart data={charts[2]}>
-                      <CartesianGrid strokeDasharray="3 3" stroke='#e2e8f0' opacity={1}/>
+                      <CartesianGrid strokeDasharray="3 3" stroke='#e2e8f0' opacity={1} />
                       <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
                       <YAxis fontSize={12} tickLine={false} axisLine={false} />
                       <Tooltip
@@ -212,7 +326,7 @@ const SolventReport1 = () => {
                           boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                         }}
                       />
-                      <Line type="monotone" dataKey="value" stroke="#7c3aed" strokeWidth={2.5} />
+                      <Line type="monotone" dataKey="value" stroke={chartColors[2]} strokeWidth={3} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -225,5 +339,5 @@ const SolventReport1 = () => {
   );
 };
 
-export default SolventReport1;
+export default DEOSectionReport;
 

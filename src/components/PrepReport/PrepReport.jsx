@@ -40,9 +40,9 @@ const PrepReport = () => {
   ]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState({ operator: '', hours: '', shift: '' });
-  const [operators, setOperators] = useState(['Operator A', 'Operator B', 'Operator C']);
-  const [shiftHours, setShiftHours] = useState(['8 hours', '12 hours', '24 hours']);
-  const [shiftNames, setShiftNames] = useState(['Day Shift', 'Night Shift', 'Rotating Shift']);
+  const [operators, setOperators] = useState(['']);
+  const [shiftHours, setShiftHours] = useState(['']);
+  const [shiftNames, setShiftNames] = useState(['']);
 
   const fetchPrepData = async ({ type, value }) => {
     setLoading(true);

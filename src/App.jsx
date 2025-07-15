@@ -4,18 +4,18 @@ import { useState } from 'react';
 // CSS import
 import './App.css';
 
-// Component Import
+// Layout / feature components
 import Navbar from "./components/navbar/Navbar.jsx";
 import DateSelector from './components/DateSelector/DateSelector.jsx';
-import SolventReport1 from './components/SolventReport/SolventReport1.jsx';
+import SolventReport from './components/SolventReport/SolventReport.jsx';
 import PrepReport from './components/PrepReport/PrepReport.jsx';
 import Footer from './components/Footer/Footer.jsx';
-import DeGummingAndBleachingoSectionReport from './components/RefineryReport/DeGummingAndBleachingSectionReport.jsx';
-import AlphaSectionReport from './components/RefineryReport/AlphaSectionReport.jsx';
-import DeWaxingSectionReport from './components/RefineryReport/DeWaxingSectionReport.jsx';
-import DEOSectionReport from './components/RefineryReport/DEOSectionReport.jsx';
+import DeGummingAndBleachingoSectionReport from './components/RefineryReport/DeGummingAndBleachingSection/DeGummingAndBleachingSectionReport.jsx';
+import AlphaSectionReport from './components/RefineryReport/AlphaSection/AlphaSectionReport.jsx';
+import DeWaxingSectionReport from '../src/components/RefineryReport/DeWaxingSection/DeWaxingSectionReport.jsx';
+import DEOSectionReport from './components/RefineryReport/DEOSection/DEOSectionReport.jsx';
 
-// Form Pages Import For diiferent sections
+// Form Pages
 import PerpFormPage from './pages/PrepFormPage.jsx';
 import SolventFormPage from './pages/SolventFormPage.jsx';
 import RefineryFormPage from './pages/RefineryFormPage.jsx';
@@ -24,6 +24,11 @@ import RefineryFormPage from './pages/RefineryFormPage.jsx';
 
 //Error Pages
 import NotFound404 from '../src/components/ErrorPages/NotFound404.jsx'
+import InternalServer500 from '../src/components/ErrorPages/InternalServer500.jsx'; // ← NEW
+
+
+
+
 
 const App = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -44,7 +49,7 @@ const App = () => {
                 <DateSelector onChange={handleDateChange} />
               </div>
               <PrepReport />
-              <SolventReport1 />
+              <SolventReport />
               <DeGummingAndBleachingoSectionReport />
               <AlphaSectionReport />
               <DeWaxingSectionReport />
@@ -53,10 +58,15 @@ const App = () => {
             </>
           }
         />
+        
+        {/*Form Pages */}
         <Route path="/prep-form" element={<PerpFormPage />} />
         <Route path="/solvent-form" element={<SolventFormPage />} />
         <Route path="/refinery-form" element={<RefineryFormPage />} />
+        
+        {/*Error Pages */}
         <Route path = '*' element={<NotFound404/>} />
+        <Route path="/500" element={<InternalServer500 />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,55 +1,84 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import AlphaSectionFilters from './AlphaSectionFilters';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { TrendingUp, BarChart3 , Download, RefreshCw, Activity } from 'lucide-react';
+import { TrendingUp, BarChart3, Calendar, Download, RefreshCw, Activity } from 'lucide-react';
 
 
 
-const DeGummingAndBleachingSectionReport = () => {
+const AlphaSectionReport = () => {
+  const [filter, setFilter] = useState({ operator: '', hours: '', shift: '' });
+  const [operators, setOperators] = useState(['']);
+  const [shiftHours, setShiftHours] = useState(['']);
+  const [shiftNames, setShiftNames] = useState(['']);
+  useEffect(() => {
+    // Fetch dropdown values
+    const fetchDropdowns = async () => {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      // Example API calls for alpha section dropdowns
+      // const [opRes, hrRes, shiftRes] = await Promise.all([
+      //   fetch('/api/alpha-section/operators'),
+      //   fetch('/api/alpha-section/shifthours'),
+      //   fetch('/api/alpha-section/shiftnames')
+      // ]);
+      // const [ops, hrs, shifts] = await Promise.all([
+      //   opRes.json(),
+      //   hrRes.json(),
+      //   shiftRes.json()
+      // ]);
+      // setOperators(ops);
+      // setShiftHours(hrs);
+      // setShiftNames(shifts);
+    };
+    fetchDropdowns();
+  }, []);
   const [parameters, setParameters] = useState([
-    { name: 'Total Production', value: '542 mT' },
-    { name: 'Steam Consumed', value: '18.42 Ton' },
-    { name: 'Unit Consumed', value: '850 unit' },
+    { name: 'Total Production', value: '682 mT' },
+    { name: 'Steam Consumed', value: '20.57 Ton' },
+    { name : 'Unit Consumed', value : '1000 unit'},
   ]);
   const [charts, setCharts] = useState([
     [
-      { name: '00:00', value: 82 },
-      { name: '04:00', value: 85 },
-      { name: '08:00', value: 89 },
-      { name: '12:00', value: 87 },
-      { name: '16:00', value: 91 },
-      { name: '20:00', value: 88 }
+      { name: '00:00', value: 85 },
+      { name: '04:00', value: 87 },
+      { name: '08:00', value: 92 },
+      { name: '12:00', value: 89 },
+      { name: '16:00', value: 94 },
+      { name: '20:00', value: 91 }
     ],
     [
-      { name: 'Mon', value: 75 },
-      { name: 'Tue', value: 79 },
-      { name: 'Wed', value: 82 },
-      { name: 'Thu', value: 76 },
-      { name: 'Fri', value: 85 },
-      { name: 'Sat', value: 81 }
+      { name: 'Mon', value: 78 },
+      { name: 'Tue', value: 82 },
+      { name: 'Wed', value: 85 },
+      { name: 'Thu', value: 79 },
+      { name: 'Fri', value: 88 },
+      { name: 'Sat', value: 84 }
     ],
     [
-      { name: 'Jan', value: 135 },
-      { name: 'Feb', value: 142 },
-      { name: 'Mar', value: 128 },
-      { name: 'Apr', value: 151 },
-      { name: 'May', value: 137 },
-      { name: 'Jun', value: 145 }
+      { name: 'Jan', value: 145 },
+      { name: 'Feb', value: 152 },
+      { name: 'Mar', value: 138 },
+      { name: 'Apr', value: 161 },
+      { name: 'May', value: 147 },
+      { name: 'Jun', value: 155 }
     ]
   ]);
   const [loading, setLoading] = useState(false);
 
-  const fetchDeGummingAndBleachingData = async ({ type, value }) => {
+  const fetchAlphaSectionData = async ({ type, value }) => {
+    if (filter.operator) url += `&operator=${filter.operator}`;
+    if (filter.hours) url += `&hours=${filter.hours}`;
+    if (filter.shift) url += `&shift=${filter.shift}`;
     setLoading(true);
     try {
       let url = '';
 
       if (type === 'date' && value) {
         const dateStr = value.toISOString().split('T')[0];
-        url = `/api/degumming-bleaching?date=${dateStr}`;
+        url = `/api/solvent?date=${dateStr}`;
       } else if (type === 'range' && value?.start && value?.end) {
         const startStr = value.start.toISOString().split('T')[0];
         const endStr = value.end.toISOString().split('T')[0];
-        url = `/api/degumming-bleaching?start=${startStr}&end=${endStr}`;
+        url = `/api/solvent?start=${startStr}&end=${endStr}`;
       } else {
         setLoading(false);
         return;
@@ -83,7 +112,8 @@ const DeGummingAndBleachingSectionReport = () => {
                 <Activity className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">DeGumming and Bleaching Section Report</h1>
+                <h1 className="text-3xl font-bold text-gray-900">Alpha Section Report</h1>
+                
               </div>
             </div>
             
@@ -102,6 +132,13 @@ const DeGummingAndBleachingSectionReport = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <AlphaSectionFilters
+          operators={operators}
+          shiftHours={shiftHours}
+          shiftNames={shiftNames}
+          filter={filter}
+          setFilter={setFilter}
+        />
         {loading ? (
           <div className="flex items-center justify-center p-12">
             <div className="text-center">
@@ -120,7 +157,6 @@ const DeGummingAndBleachingSectionReport = () => {
                     <h3 className="text-lg font-semibold text-white">Performance Parameters</h3>
                   </div>
                 </div>
-                
                 <div className="divide-y divide-gray-200">
                   {parameters.map((param, idx) => (
                     <div key={idx} className="px-6 py-4 hover:bg-gray-50 transition-colors duration-200">
@@ -221,4 +257,5 @@ const DeGummingAndBleachingSectionReport = () => {
   );
 };
 
-export default DeGummingAndBleachingSectionReport;
+export default AlphaSectionReport;
+

@@ -1,9 +1,35 @@
 import React, { useState } from 'react';
+import DeWaxingSectionFilters from './DeWaxingSectionFilters';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { TrendingUp, BarChart3 , Download, RefreshCw, Activity } from 'lucide-react';
 
 
 const DeWaxingSectionReport = () => {
+  const [filter, setFilter] = useState({ operator: '', hours: '', shift: '' });
+  const [operators, setOperators] = useState(['']);
+  const [shiftHours, setShiftHours] = useState(['']);
+  const [shiftNames, setShiftNames] = useState(['']);
+  React.useEffect(() => {
+    // Fetch dropdown values
+    const fetchDropdowns = async () => {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      // Example API calls for dewaxing section dropdowns
+      // const [opRes, hrRes, shiftRes] = await Promise.all([
+      //   fetch('/api/dewaxing-section/operators'),
+      //   fetch('/api/dewaxing-section/shifthours'),
+      //   fetch('/api/dewaxing-section/shiftnames')
+      // ]);
+      // const [ops, hrs, shifts] = await Promise.all([
+      //   opRes.json(),
+      //   hrRes.json(),
+      //   shiftRes.json()
+      // ]);
+      // setOperators(ops);
+      // setShiftHours(hrs);
+      // setShiftNames(shifts);
+    };
+    fetchDropdowns();
+  }, []);
   const [parameters, setParameters] = useState([
     { name: 'Total Production', value: '682 mT' },
     { name: 'Steam Consumed', value: '20.57 Ton' },
@@ -38,6 +64,9 @@ const DeWaxingSectionReport = () => {
   const [loading, setLoading] = useState(false);
 
   const fetchDeWaxingData = async ({ type, value }) => {
+    if (filter.operator) url += `&operator=${filter.operator}`;
+    if (filter.hours) url += `&hours=${filter.hours}`;
+    if (filter.shift) url += `&shift=${filter.shift}`;
     setLoading(true);
     try {
       let url = '';
@@ -83,10 +112,8 @@ const DeWaxingSectionReport = () => {
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">De-Waxing Section Report</h1>
-                
               </div>
             </div>
-            
             <div className="flex items-center space-x-3 mt-4 lg:mt-0">
               <button className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200">
                 <RefreshCw className="h-4 w-4" />
@@ -100,8 +127,14 @@ const DeWaxingSectionReport = () => {
           </div>
         </div>
       </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <DeWaxingSectionFilters
+          operators={operators}
+          shiftHours={shiftHours}
+          shiftNames={shiftNames}
+          filter={filter}
+          setFilter={setFilter}
+        />
         {loading ? (
           <div className="flex items-center justify-center p-12">
             <div className="text-center">
@@ -120,7 +153,6 @@ const DeWaxingSectionReport = () => {
                     <h3 className="text-lg font-semibold text-white">Performance Parameters</h3>
                   </div>
                 </div>
-                
                 <div className="divide-y divide-gray-200">
                   {parameters.map((param, idx) => (
                     <div key={idx} className="px-6 py-4 hover:bg-gray-50 transition-colors duration-200">
@@ -137,18 +169,17 @@ const DeWaxingSectionReport = () => {
                 </div>
               </div>
             </div>
-
             {/* Charts Section */}
             <div className="xl:col-span-2 space-y-8">
               {/* Chart 1 */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <div className="flex items-center space-x-2 mb-6">
                   <TrendingUp className="h-5 w-5 text-blue-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">{chartTitles[0]}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">Total Production</h3>
                 </div>
                 <ResponsiveContainer width="100%" height={280}>
                   <LineChart data={charts[0]}>
-                    <CartesianGrid strokeDasharray="3 3" stroke='#e2e8f0' opacity={1} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={1} />
                     <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
                     <YAxis fontSize={12} tickLine={false} axisLine={false} />
                     <Tooltip
@@ -159,21 +190,20 @@ const DeWaxingSectionReport = () => {
                         boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                       }}
                     />
-                    <Line type="monotone" dataKey="value" stroke={chartColors[0]} strokeWidth={2.5} />
+                    <Line type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={3} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Chart 2 */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center space-x-2 mb-6">
                     <TrendingUp className="h-5 w-5 text-blue-600" />
-                    <h3 className="text-lg font-semibold text-gray-900">{chartTitles[1]}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">Steam Used In Per Ton Production</h3>
                   </div>
                   <ResponsiveContainer width="100%" height={250}>
                     <LineChart data={charts[1]}>
-                      <CartesianGrid strokeDasharray="3 3" stroke='#e8e2f0' opacity={1} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={1}  />
                       <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
                       <YAxis fontSize={12} tickLine={false} axisLine={false} />
                       <Tooltip
@@ -184,20 +214,19 @@ const DeWaxingSectionReport = () => {
                           boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                         }}
                       />
-                      <Line type="monotone" dataKey="value" stroke={chartColors[1]} strokeWidth={2.5} />
+                      <Line type="monotone" dataKey="value" stroke="#059669" strokeWidth={3} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
-
                 {/* Chart 3 */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center space-x-2 mb-6">
                     <TrendingUp className="h-5 w-5 text-blue-600" />
-                    <h3 className="text-lg font-semibold text-gray-900">{chartTitles[2]}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">Unit Used in Per Ton Production</h3>
                   </div>
                   <ResponsiveContainer width="100%" height={250}>
                     <LineChart data={charts[2]}>
-                      <CartesianGrid strokeDasharray="3 3" stroke='#e2e8f0' opacity={1} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={1}  />
                       <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
                       <YAxis fontSize={12} tickLine={false} axisLine={false} />
                       <Tooltip
@@ -208,7 +237,7 @@ const DeWaxingSectionReport = () => {
                           boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                         }}
                       />
-                      <Line type="monotone" dataKey="value" stroke={chartColors[2]} strokeWidth={2.5} />
+                      <Line type="monotone" dataKey="value" stroke="#7c3aed" strokeWidth={3} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>

@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { TrendingUp, BarChart3, Calendar, Download, RefreshCw, Activity } from 'lucide-react';
-import DateSelector from '../DateSelector/DateSelector';
+import { TrendingUp, BarChart3, Download, RefreshCw, Activity } from 'lucide-react';
+
+import Filters from './Filters';
+
 
 const SolventReport = () => {
+  const [filter, setFilter] = useState({ operator: '', hours: '', shift: '' });
+  const [operators, setOperators] = useState(['']);
+  const [shiftHours, setShiftHours] = useState(['']);
+  const [shiftNames, setShiftNames] = useState(['']);
   const [parameters, setParameters] = useState([
     { name: 'Crude Oil Color', value: '32' },
     { name: 'Crude Oil Moisture', value: '0.25%' },
@@ -72,6 +78,30 @@ const SolventReport = () => {
     }
   };
 
+  
+  useEffect(() => {
+    // Fetch dropdown values
+    const fetchDropdowns = async () => {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      // Example API calls for solvent dropdowns
+      // const [opRes, hrRes, shiftRes] = await Promise.all([
+      //   fetch('/api/solvent/operators'),
+      //   fetch('/api/solvent/shifthours'),
+      //   fetch('/api/solvent/shiftnames')
+      // ]);
+      // const [ops, hrs, shifts] = await Promise.all([
+      //   opRes.json(),
+      //   hrRes.json(),
+      //   shiftRes.json()
+      // ]);
+      // setOperators(ops);
+      // setShiftHours(hrs);
+      // setShiftNames(shifts);
+    };
+    fetchDropdowns();
+  }, []);
+  
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 mt-25">
       {/* Header Section */}
@@ -103,6 +133,13 @@ const SolventReport = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Filters
+          operators={operators}
+          shiftHours={shiftHours}
+          shiftNames={shiftNames}
+          filter={filter}
+          setFilter={setFilter}
+        />
         {loading ? (
           <div className="flex items-center justify-center p-12">
             <div className="text-center">
@@ -121,7 +158,6 @@ const SolventReport = () => {
                     <h3 className="text-lg font-semibold text-white">Performance Parameters</h3>
                   </div>
                 </div>
-                
                 <div className="divide-y divide-gray-200">
                   {parameters.map((param, idx) => (
                     <div key={idx} className="px-6 py-4 hover:bg-gray-50 transition-colors duration-200">
@@ -141,129 +177,76 @@ const SolventReport = () => {
 
             {/* Charts Section */}
             <div className="xl:col-span-2 space-y-8">
-              {/* Chart 1 */}
+              {/* Chart 1 - Total Production */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <div className="flex items-center space-x-2 mb-6">
                   <TrendingUp className="h-5 w-5 text-blue-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">Operator wise Production Performance</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">Total Production</h3>
                 </div>
                 <ResponsiveContainer width="100%" height={280}>
                   <LineChart data={charts[0]}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                    <XAxis 
-                      dataKey="name" 
-                      stroke="#6b7280"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <YAxis 
-                      stroke="#6b7280"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <Tooltip 
+                    <CartesianGrid strokeDasharray="3 3" stroke='#e2e8f0' opacity={1} />
+                    <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+                    <YAxis fontSize={12} tickLine={false} axisLine={false} />
+                    <Tooltip
                       contentStyle={{
                         backgroundColor: '#fff',
                         border: '1px solid #e5e7eb',
                         borderRadius: '8px',
-                        boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                       }}
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="value" 
-                      stroke="#3b82f6" 
-                      strokeWidth={3} 
-                      dot={{ r: 5, fill: '#3b82f6' }}
-                      activeDot={{ r: 7, fill: '#1d4ed8' }}
-                    />
+                    <Line type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={2.5} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
 
+              {/* Charts 2 & 3 - Side by Side for Desktop */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Chart 2 */}
+                {/* Chart 2 - Steam Used In Per Ton Production */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center space-x-2 mb-6">
-                    <TrendingUp className="h-5 w-5 text-emerald-600" />
-                    <h3 className="text-lg font-semibold text-gray-900">Operator Wise Steam Consumption</h3>
+                    <TrendingUp className="h-5 w-5 text-blue-600" />
+                    <h3 className="text-lg font-semibold text-gray-900">Steam Used In Per Ton Production</h3>
                   </div>
                   <ResponsiveContainer width="100%" height={250}>
                     <LineChart data={charts[1]}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis 
-                        dataKey="name" 
-                        stroke="#6b7280"
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <YAxis 
-                        stroke="#6b7280"
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <Tooltip 
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+                      <YAxis fontSize={12} tickLine={false} axisLine={false} />
+                      <Tooltip
                         contentStyle={{
                           backgroundColor: '#fff',
                           border: '1px solid #e5e7eb',
                           borderRadius: '8px',
-                          boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                         }}
                       />
-                      <Line 
-                        type="monotone" 
-                        dataKey="value" 
-                        stroke="#10b981" 
-                        strokeWidth={3} 
-                        dot={{ r: 5, fill: '#10b981' }}
-                        activeDot={{ r: 7, fill: '#047857' }}
-                      />
+                      <Line type="monotone" dataKey="value" stroke="#059669" strokeWidth={2.5} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
 
-                {/* Chart 3 */}
+                {/* Chart 3 - Unit Used in Per Ton Production */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center space-x-2 mb-6">
-                    <TrendingUp className="h-5 w-5 text-purple-600" />
-                    <h3 className="text-lg font-semibold text-gray-900">Operator Wise Electric Consumption</h3>
+                    <TrendingUp className="h-5 w-5 text-blue-600" />
+                    <h3 className="text-lg font-semibold text-gray-900">Unit Used in Per Ton Production</h3>
                   </div>
                   <ResponsiveContainer width="100%" height={250}>
                     <LineChart data={charts[2]}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis 
-                        dataKey="name" 
-                        stroke="#6b7280"
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <YAxis 
-                        stroke="#6b7280"
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <Tooltip 
+                      <CartesianGrid strokeDasharray="3 3" stroke='#e2e8f0' opacity={1}/>
+                      <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+                      <YAxis fontSize={12} tickLine={false} axisLine={false} />
+                      <Tooltip
                         contentStyle={{
                           backgroundColor: '#fff',
                           border: '1px solid #e5e7eb',
                           borderRadius: '8px',
-                          boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                         }}
                       />
-                      <Line 
-                        type="monotone" 
-                        dataKey="value" 
-                        stroke="#8b5cf6" 
-                        strokeWidth={3} 
-                        dot={{ r: 5, fill: '#8b5cf6' }}
-                        activeDot={{ r: 7, fill: '#7c3aed' }}
-                      />
+                      <Line type="monotone" dataKey="value" stroke="#7c3aed" strokeWidth={2.5} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -277,3 +260,4 @@ const SolventReport = () => {
 };
 
 export default SolventReport;
+
