@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import AlphaForm from './AlphaForm';
 
 const DeGumming_Bleaching_Form = () => {
   const [shiftHours, setShiftHours] = useState('');
@@ -46,7 +45,7 @@ const DeGumming_Bleaching_Form = () => {
   const alphaShiftSubparts = getShiftSubparts(alphaShiftName);
 
   return (
-    <div className="max-w-6xl mx-auto p-4 sm:p-6 min-h-screen" style={{ backgroundColor: '#FBF0AF' }}>
+    <>
       {/* Header */}
       <div className="rounded-xl shadow-md mb-6 p-4 text-center" style={{ backgroundColor: '#FFE95B' }}>
         <h1 className="text-2xl font-bold text-gray-800">Operator Performance Form</h1>
@@ -152,8 +151,7 @@ const DeGumming_Bleaching_Form = () => {
           )}
         </div>
       </div>
-      <AlphaForm/>
-    </div>
+    </>
   );
 };
 
