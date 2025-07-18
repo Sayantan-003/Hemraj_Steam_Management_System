@@ -101,18 +101,23 @@ const AlphaForm = () => {
         <div className="bg-gray-50 rounded-lg p-4 shadow">
           <h3 className="font-semibold text-gray-800 mb-4 px-3 py-2 rounded-md" style={{ backgroundColor: '#FFE95B' }}>Dip/Gap Entries for DGOT Tank</h3>
           {alphaShiftSubparts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <>
               {alphaShiftSubparts.map((label, index) => (
-                <div key={index}>
-                  <label className="block text-sm font-medium text-gray-700">Dip/Gap of DGOT in {label}</label>
-                  <input
-                    type="text"
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                    placeholder="Enter value"
-                  />
+                <div key={index} className="mb-4">
+                  <h4 className="font-semibold text-gray-700 mb-2 px-2 py-1 rounded-md" style={{ backgroundColor: '#FFE95B' }}>{label}</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Dip/Gap of DGOT in {label}</label>
+                      <input
+                        type="text"
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                        placeholder="Enter value"
+                      />
+                    </div>
+                  </div>
                 </div>
               ))}
-            </div>
+            </>
           ) : (
             <p className="text-sm text-gray-500">Select a shift name to view fields</p>
           )}

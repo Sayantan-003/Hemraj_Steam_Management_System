@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const defaultShiftTimmings = {
   '8':  ['Shift A', 'Shift B', 'Shift C'],
@@ -18,9 +18,9 @@ const ShiftSelector = ({
   const [shiftTimming, setShiftTimming] = useState(value.shiftTimming || "");
 
   // Update parent on any change
-  React.useEffect(() => {
+useEffect(() => {
     onChange({ operator, shiftHours, shiftTimming });
-    // eslint-disable-next-line
+    
   }, [operator, shiftHours, shiftTimming]);
 
   const shiftHoursOptions = Object.keys(shiftTimmings);

@@ -5,7 +5,7 @@ const operatorNames = ["Gurucharan Rakshit", "Sivjee Patel", "Taresh Roy"];
 const shiftHoursOptions = ["8", "12", "16", "24"];
 const shiftNamesByHours = {
   '8': ['Shift A', 'Shift B', 'Shift C'],
-  '12': ['Shift A+ Shift B(1/2)', 'B+C(1/2)', 'Shift C+ Shift A(1/2)', 'Shift A(1/2)+ Shift B', 'Shift B(1/2)+ Shift C', 'Shift C(1/2)+ Shift A'],
+  '12': ['Shift A+ Shift B(1/2)', 'Shift B + Shift C(1/2)', 'Shift C + Shift A(1/2)', 'Shift A(1/2) + Shift B', 'Shift B(1/2) + Shift C', 'Shift C(1/2) + Shift A'],
   '16': ['Shift A + Shift B', 'Shift B + Shift C', 'Shift C + Shift A', 'Shift A + Shift B', 'Shift B + Shift C', 'Shift C + Shift A'],
   '24': ['Shift A + Shift B + Shift C']
 };
