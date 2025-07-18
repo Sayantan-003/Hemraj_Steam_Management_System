@@ -1,3 +1,4 @@
+import React from "react";
 import Hemraj_logo from "../../assets/images/Hemraj_logo.png";
 
 const Logo = () => {

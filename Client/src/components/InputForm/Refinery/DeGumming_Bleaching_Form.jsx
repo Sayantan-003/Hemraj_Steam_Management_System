@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 const DeGumming_Bleaching_Form = () => {
   const [shiftHours, setShiftHours] = useState('');
   const [shiftName, setShiftName] = useState('');
-  const [alphaShiftHours, setAlphaShiftHours] = useState('');
   const [alphaShiftName, setAlphaShiftName] = useState('');
 
   const shiftNameOptions = {

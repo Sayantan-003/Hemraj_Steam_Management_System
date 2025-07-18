@@ -27,3 +27,11 @@ export default defineConfig([
     },
   },
 ])
+
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "./index.html"
+  ],
+  // ...other config
+}
