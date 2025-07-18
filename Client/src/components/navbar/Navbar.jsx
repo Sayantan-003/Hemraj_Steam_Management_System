@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, X, Settings, BarChart3, Gauge, Users, Bell, Search } from 'lucide-react';
-import Logo from "../navbar/Logo"
+import Logo from "./Logo"
 
 
 

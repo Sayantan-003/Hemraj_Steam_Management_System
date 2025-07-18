@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import ModeDropdown from '../DateSelector/ModeDropdown';
-import SingleDateSelector from '../DateSelector/SingleDateSelector';
-import RangeDateSelector from '../DateSelector/RangeDateSelector';
+import ModeDropdown from './ModeDropdown';
+import SingleDateSelector from './SingleDateSelector';
+import RangeDateSelector from './RangeDateSelector';
 import StatusDisplay from './StatusDisplay';
 
 

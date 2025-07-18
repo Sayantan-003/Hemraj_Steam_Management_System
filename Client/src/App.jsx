@@ -12,7 +12,7 @@ import PrepReport from './components/PrepReport/PrepReport.jsx';
 import Footer from './components/Footer/Footer.jsx';
 import DeGummingAndBleachingoSectionReport from './components/RefineryReport/DeGummingAndBleachingSection/DeGummingAndBleachingSectionReport.jsx';
 import AlphaSectionReport from './components/RefineryReport/AlphaSection/AlphaSectionReport.jsx';
-import DeWaxingSectionReport from '../src/components/RefineryReport/DeWaxingSection/DeWaxingSectionReport.jsx';
+import DeWaxingSectionReport from './components/RefineryReport/DeWaxingSection/DeWaxingSectionReport.jsx';
 import DEOSectionReport from './components/RefineryReport/DEOSection/DEOSectionReport.jsx';
 
 // Form Pages
@@ -23,8 +23,8 @@ import RefineryFormPage from './pages/RefineryFormPage.jsx';
 
 
 //Error Pages
-import NotFound404 from '../src/components/ErrorPages/NotFound404.jsx'
-import InternalServer500 from '../src/components/ErrorPages/InternalServer500.jsx'; // ← NEW
+import NotFound404 from './components/ErrorPages/NotFound404.jsx'
+import InternalServer500 from './components/ErrorPages/InternalServer500.jsx'; // ← NEW
 
 
 
