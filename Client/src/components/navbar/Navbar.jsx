@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Settings, BarChart3, Gauge, Users, Bell, Search } from 'lucide-react';
+import { Menu, X, Settings, BarChart3, Gauge, Bell, Search } from 'lucide-react';
 import Logo from "./Logo"
 
 
@@ -10,10 +10,9 @@ const Navbar = () => {
   const [activeItem, setActiveItem] = useState('Dashboard');
 
   const navItems = [
-    { name: 'Dashboard', icon: BarChart3, href: '#dashboard' },
-    { name: 'Monitoring', icon: Gauge, href: '#monitoring' },
-    { name: 'Settings', icon: Settings, href: '#settings' },
-    { name: 'Users', icon: Users, href: '#users' },
+    { name: 'Prep', icon: BarChart3, href: '#Perperatory' },
+    { name: 'Solvent', icon: Gauge, href: '#' },
+    { name: 'Refinery', icon: Settings, href: '#' },
   ];
 
   const handleItemClick = (itemName) => {

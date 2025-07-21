@@ -1,6 +1,6 @@
-const PrepInput = require('../model/prepInput.model');
-const RefineryInput = require('../model/refineryInput.model');
-const SolventInput = require('../model/solventInput.model');
+const PrepInput = require('../models/prepInput.model');
+const RefineryInput = require('../models/refineryInput.model');
+const SolventInput = require('../models/solventInput.model');
 
 // Prep Input
 exports.createPrepInput = async (req, res) => {

@@ -68,9 +68,9 @@ const DeWaxingForm = () => {
             onChange={e => setOperatorName(e.target.value)}
           >
             <option value="">Select</option>
-            <option value="Shayamal Doloui">Shayamal Doloui</option>
-            <option value="Santosh Mondal">Santosh Mondal</option>
-            <option value="Utpal Doloui">Utpal Doloui</option>
+            <option value="Arup Dalui">Arup Dalui</option>
+            <option value="Abhijit Dutta">Abhijit Dutta</option>
+            <option value="Raju Mukhia">Raju Mukhia</option>
           </select>
         </div>
         <div>

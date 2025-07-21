@@ -58,9 +58,9 @@ const AlphaForm = () => {
               <label className="block text-sm font-medium text-gray-700">Operator Name</label>
               <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
                 <option value="">Select</option>
-                <option value="Shayamal Doloui">Shayamal Doloui</option>
+                <option value="Shayamal Doloui">Shayamal Kr. Doloui</option>
                 <option value="Santosh Mondal">Santosh Mondal</option>
-                <option value="Utpal Doloui">Utpal Doloui</option>
+                <option value="Utpal Doloui">Utpal Dalui</option>
               </select>
             </div>
             <div>

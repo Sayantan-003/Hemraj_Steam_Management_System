@@ -63,9 +63,9 @@ const DeGumming_Bleaching_Form = () => {
               <label className="block text-sm font-medium text-gray-700">Operator Name</label>
               <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
                 <option value="">Select</option>
-                <option value="Sahadeb Adhikary">Sahadeb Adhikary</option>
+                <option value="Sahadeb Adhikary">Sahadev Adhikary</option>
                 <option value="Biplab Pal">Biplab Pal</option>
-                <option value="Abhijit Doloui">Abhijit Doloui</option>
+                <option value="Abhijit Doloui">Abhijit Dalui</option>
               </select>
             </div>
             <div>
