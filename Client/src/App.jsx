@@ -18,6 +18,8 @@ import DEOSectionReport from './components/RefineryReport/DEOSection/DEOSectionR
 
 // Form Pages
 import PerpFormPage from './pages/PrepFormPage.jsx';
+import NewPerpForm from './components/InputForm/Prep/newPrepForm.jsx';
+import NewSolventForm from './components/InputForm/Solvent/newSolventForm.jsx'
 import SolventFormPage from './pages/SolventFormPage.jsx';
 import RefineryFormPage from './pages/RefineryFormPage.jsx';
 
@@ -64,6 +66,8 @@ const App = () => {
         <Route path="/prep-form" element={<PerpFormPage />} />
         <Route path="/solvent-form" element={<SolventFormPage />} />
         <Route path="/refinery-form" element={<RefineryFormPage />} />
+        <Route path = "new-prep-form" element={<NewPerpForm />}/>
+        <Route path = "new-solvent-form" element={<NewSolventForm />}/>
         
         {/*Error Pages */}
         <Route path = '*' element={<NotFound404/>} />

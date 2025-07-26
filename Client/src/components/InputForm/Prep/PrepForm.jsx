@@ -176,7 +176,7 @@ const PrepForm = () => {
           )}
         </div>
 
-        {/* Time & Total Ampere Load Entries */}
+        {/* Time & Total Ampere Load Entries */ }
         <div className="bg-white rounded-xl shadow-md p-6">
           <h2 className="text-lg font-semibold text-gray-800 mb-4 px-4 py-2 rounded-md" style={{ backgroundColor: '#F0CB8A' }}>Time & Total Ampere Load Entries</h2>
           <div className="flex flex-col gap-4">
@@ -263,7 +263,7 @@ const PrepForm = () => {
           </div>
         </div>
 
-        {/* Submit Button */}
+        {/* Submit Button*/ }
         <div className="text-center">
           <button
             type="submit"
@@ -278,3 +278,12 @@ const PrepForm = () => {
 };
 
 export default PrepForm;
+
+
+
+
+
+
+
+
+

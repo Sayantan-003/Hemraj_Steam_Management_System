@@ -1,0 +1,105 @@
+/* Full page container */
+.login-container {
+  height: 100vh;
+  background: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1050&q=80") no-repeat center center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(8px);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Glass-style login box */
+.login-box {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  width: 320px;
+  color: #fff;
+  position: relative;
+}
+
+.login-box h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #000;
+}
+
+/* Inputs */
+.login-box input[type="email"],
+.login-box input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 18px;
+  border: none;
+  border-bottom: 2px solid #000;
+  background: transparent;
+  color: #000;
+  outline: none;
+  font-size: 16px;
+}
+
+.login-box input::placeholder {
+  color: #555;
+}
+
+/* Remember and Forgot */
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.login-options a {
+  color: #000;
+  text-decoration: none;
+}
+
+.login-options input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* Button */
+.login-box button {
+  width: 100%;
+  padding: 12px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login-box button:hover {
+  background: #333;
+}
+
+/* Register */
+.login-box p {
+  text-align: center;
+  margin-top: 20px;
+  color: #000;
+}
+
+.login-box p a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+/* Message (success or error) */
+.login-box span {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  color: red;
+  font-size: 14px;
+}
