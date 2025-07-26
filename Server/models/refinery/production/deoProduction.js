@@ -1,5 +1,5 @@
-function calculateDeoProduction({ shiftHours, shiftName, shiftData, calibrationFactor }) {
-  const cal = parseFloat(calibrationFactor);
+function calculateDeoFattyProduction({ shiftHours, shiftName, shiftData, calibrationFactor }) {
+  const Fattycal = parseFloat(calibrationFactor);
 
   if (shiftHours === '8') {
     const shift = shiftName.trim();
@@ -29,5 +29,18 @@ function calculateDeoProduction({ shiftHours, shiftName, shiftData, calibrationF
 
   return 0;
 }
+
+
+
+function calculateDeoSTProduction({ shiftHours, shiftName, shiftData, calibrationFactor }) {
+  const STcal = parseFloat(calibrationFactor);
+
+  if(shiftHours == '8'){
+    const shift = shiftName.trim = 
+  }
+}
+
+
+
 
 module.exports = calculateDeoProduction;
