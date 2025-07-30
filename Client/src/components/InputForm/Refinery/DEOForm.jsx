@@ -20,18 +20,18 @@ const DEOSection = () => {
   const [fattyTankValues, setFattyTankValues] = useState([]);
   const [fotTankValues, setFotTankValues] = useState([]); // Add this line
 
-  // Define number of shifts for each hour option
+  //  number of shifts for each hour option
   const shiftCountByHours = {
     '8': 1,
     '12': 2,
     '18': 3,
-    // add more if needed
+    
   };
 
   // State to hold values for all shifts
   const [shiftTankValues, setShiftTankValues] = useState([]);
 
-  // Shift name options (same as De-Waxing Form)
+  // Shift name options 
   const shiftNameOptions = {
     '8': ['Shift A', 'Shift B', 'Shift C'],
     '12': [
@@ -50,7 +50,7 @@ const DEOSection = () => {
   useEffect(() => {
     const selected = TANK_TYPE_OPTIONS.find(opt => opt.value === tankType);
     setTankValues(Array(selected?.count || 0).fill(""));
-    // Add this block:
+    
     if (tankType === "FOT" && shiftHours) {
       const count = shiftCountByHours[shiftHours] || 0;
       setFotTankValues(Array(count).fill().map(() => ["", ""]));
@@ -346,5 +346,34 @@ const DEOSection = () => {
 </div>
   );
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default DEOSection;

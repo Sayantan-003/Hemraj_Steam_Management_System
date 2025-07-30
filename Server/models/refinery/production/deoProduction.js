@@ -1,4 +1,4 @@
-function calculateDeoFattyProduction({ shiftHours, shiftName, shiftData, calibrationFactor }) {
+function calculateDeoFattyProduction({ fattyTanks, FattycalibrationFactor }) {
   const Fattycal = parseFloat(calibrationFactor);
 
   if (shiftHours === '8') {
@@ -30,15 +30,51 @@ function calculateDeoFattyProduction({ shiftHours, shiftName, shiftData, calibra
   return 0;
 }
 
-
-
-function calculateDeoSTProduction({ shiftHours, shiftName, shiftData, calibrationFactor }) {
+function calculateDeoSTProduction({ stTanks, STcalibrationFactor }) {
   const STcal = parseFloat(calibrationFactor);
-
-  if(shiftHours == '8'){
-    const shift = shiftName.trim = 
+  const stTotal = 0;
+  for (const shift of stTanks){
+    for(const val of shift){
+      const numericVal = parseFloat(val);
+      if(!NaN(numericVal)){
+          stTotal += numericVal * STcal;
+      }
+    }
   }
+  return stTotal;
 }
+
+function calculateDeoFOTProduction({ FOTTanks, FOTcalibrationFactor}){
+  const FOTcal = parseFloat(FOTcalibrationFactor);
+  const FOTTotal = 0;
+  for(const shift of FOTTanks) {
+    for (const val of shift){
+      const numericVal = parseFloat(val);
+      if(!NaN(numericVal)){
+        FOTTotal += numericVal * FOTcal;
+      }
+    }
+  } 
+return FOTTotal;
+}
+
+
+function calculateDeoOUTProduction({ OUTTanks, calibrationFactor}){
+  const OUTcal = parseFloat(calibrationFactor);
+  const OUTTotal = 0;
+  for(const shift of FOTTanks) {
+    for (const val of shift){
+      const numericVal = parseFloat(val);
+      if(!NaN(numericVal)){
+        OUTTotal += numericVal * OUTcal;
+      }
+    }
+  } 
+return OUTTotal;
+}
+
+
+
 
 
 

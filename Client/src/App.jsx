@@ -16,10 +16,13 @@ import AlphaSectionReport from './components/RefineryReport/AlphaSection/AlphaSe
 import DeWaxingSectionReport from './components/RefineryReport/DeWaxingSection/DeWaxingSectionReport.jsx';
 import DEOSectionReport from './components/RefineryReport/DEOSection/DEOSectionReport.jsx';
 
-// Form Pages
+//New Form Pages
+import NewPerpFormPage from './pages/new_PrepFormPage.jsx'
+import NewSolventFormPage from './pages/new_SolventFormPage.jsx'
+import NewRefineryFormPage from './pages/new_RefineryFormPage.jsx'
+
+//Old Form Pages 
 import PerpFormPage from './pages/PrepFormPage.jsx';
-import NewPerpForm from './components/InputForm/Prep/newPrepForm.jsx';
-import NewSolventForm from './components/InputForm/Solvent/newSolventForm.jsx'
 import SolventFormPage from './pages/SolventFormPage.jsx';
 import RefineryFormPage from './pages/RefineryFormPage.jsx';
 
@@ -62,12 +65,15 @@ const App = () => {
           }
         />
         
-        {/*Form Pages */}
-        <Route path="/prep-form" element={<PerpFormPage />} />
-        <Route path="/solvent-form" element={<SolventFormPage />} />
-        <Route path="/refinery-form" element={<RefineryFormPage />} />
-        <Route path = "new-prep-form" element={<NewPerpForm />}/>
-        <Route path = "new-solvent-form" element={<NewSolventForm />}/>
+        {/*OLD Form Pages */}
+        <Route path= "/prep-form" element={<PerpFormPage />} />
+        <Route path= "/solvent-form" element={<SolventFormPage />} />
+        <Route path= "/refinery-form" element={<RefineryFormPage />} />
+
+        {/*New Form Pages */}
+        <Route path = "/new-prep-form" element={<NewPerpFormPage />}/>
+        <Route path = "/new-solvent-form" element={<NewSolventFormPage />}/>
+        <Route path = "/new-refinery-form" element={<NewRefineryFormPage />}/>
         
         {/*Error Pages */}
         <Route path = '*' element={<NotFound404/>} />

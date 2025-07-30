@@ -213,6 +213,7 @@ const New_DEO_Form = () => {
         <button
             type="submit"
             className="bg-[#ACFD8B] hover:bg-green-300 text-gray-800 font-semibold py-2 px-6 rounded-md shadow"
+            onClick = {handleSubmit}
         >
             Submit
         </button>
@@ -221,5 +222,60 @@ const New_DEO_Form = () => {
     </div>
   );
 };
+
+
+
+
+
+
+
+const handleSubmit = async () => {
+  //payload based on current tankType
+  const data = {
+    operatorName,
+    shiftHours,
+    shiftName,
+    tankType,
+    fattyTankValues,
+    timestamp: new Date().toISOString(), 
+  };
+
+  if (tankType === "ST") {
+    data.tankValues = shiftTankValues; // 2D array [shift][6 tank readings]
+  } else if (tankType === "FOT") {
+    data.tankValues = fotTankValues; // 2D array [shift][2 readings: FOT-A, FOT-B]
+  } else if (tankType === "OUT") {
+    data.tankValues = tankValues; // 1D array based on shift count
+  }
+
+  try {
+    const response = await fetch("/api/save-deo-data", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      alert("Data saved successfully!");
+      // Optionally reset form fields
+    } else {
+      alert("Failed to save data.");
+    }
+  } catch (error) {
+    console.error("Submission error:", error);
+    alert("An error occurred during submission.");
+  }
+};
+
+
+
+
+
+
+
+
+
 
 export default New_DEO_Form;
