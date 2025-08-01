@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import ShiftSelector from "../../common/ShiftSelector";
+// import ShiftSelector from "../../common/ShiftSelector";
 
 const DeWaxingForm = () => {
   const [operatorName, setOperatorName] = useState("");

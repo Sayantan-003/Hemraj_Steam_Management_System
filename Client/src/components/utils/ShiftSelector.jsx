@@ -63,11 +63,12 @@ useEffect(() => {
 
       {/* Shift Timmings Dropdown */}
       <div>
-        <label className='block text-sm font-medium text-gray-700 mb-1'>Shift Timmings</label>
+        <label className='block text-sm font-medium text-gray-700 mb-1'>Shift Name</label>
         <select
           className="w-full border border-gray-300 rounded px-2 py-1"
           value={shiftTimming}
           onChange={e => setShiftTimming(e.target.value)}
+          
           disabled={!shiftHours}
         >
           <option value="">{shiftHours ? "Select Timming" : "Select Shift Hours First"}</option>

@@ -1,56 +1,49 @@
+import React,  {useState} from "react";
+import OperatorDetails from "./OperatorDetails"
+import SteamEntrySection from './SteamEntrySection'
+import AmpereLoadSection from './AmpereLoadSection'
+import FeedingSection from './FeedingSection'
+import FormHeader from './FormHeader'
 
-import React, { useState } from "react";
+
+
+const operatorNames = [
+  "Prasanta Santra",
+  "Raghav Roy",
+  "Srimanta Pramanik"
+];
 
 const NewPerpForm = () => {
   const [numOperators, setNumOperators] = useState(1);
-  const [shiftHours, setShiftHours] = useState(Array(numOperators).fill(""));
+  const [operatorData, setOperatorData] = useState(Array(1).fill({}));
 
   const handleNumOperatorsChange = (e) => {
     const value = parseInt(e.target.value);
     setNumOperators(value);
-    setShiftHours(Array(value).fill(""));
+    setOperatorData(Array(value).fill({}));
   };
 
-  const handleShiftHourChange = (index, value) => {
-    const newShiftHours = [...shiftHours];
-    newShiftHours[index] = value;
-    setShiftHours(newShiftHours);
+  const handleOperatorDataChange = (index, newData) => {
+    const updated = [...operatorData];
+    updated[index] = newData;
+    setOperatorData(updated);
   };
 
-  const getShiftNameOptions = (shiftHour) => {
-    if (shiftHour === "8 Hours") {
-      return ["Shift A", "Shift B", "Shift C"];
-    } else if (shiftHour === "12 Hours") {
-      return [
-        "Shift A + Shift B(1/2)",
-        "Shift B + Shift C(1/2)",
-        "Shift C + Shift A(1/2)",
-        "Shift A(1/2) + Shift B",
-        "Shift B(1/2) + Shift C",
-        "Shift C(1/2) + Shift A",
-      ];
-    } else if (shiftHour === "16 Hours") {
-      return [
-        "Shift A + Shift B",
-        "Shift B + Shift C",
-        "Shift C + Shift A"
-      ];
-    } else if (shiftHour === "24 Hours") {
-      return ["Shift A + Shift B + Shift C"];
-    } else {
-      return [];
-    }
+  const handleSubmit = () => {
+    const payload = {
+      operatorDetails: operatorData,
+      // add more form data here later (steam, amp, feed, etc.)
+    };
+    console.log("Form Submission Payload:", payload);
   };
 
   return (
     <div className="p-6 min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/your-background-image.jpg')" }}>
-      <div className="bg-[#F7F7F7] p-6 rounded-lg shadow-lg">
-        <div className="text-center mb-6 bg-[#F9D232] p-4 rounded">
-          <h1 className="text-2xl font-bold text-gray-800">Operator Performance Form</h1>
-          <p className="text-sm text-gray-600">(Prep Section)</p>
-        </div>
+      <div className="bg-[#EEE5D5] p-6 rounded-lg shadow-lg">
 
-        {/* Section 1 */}
+        <FormHeader title="Operator Performance Form" subtitle="(Prep Section)" />
+
+        {/* Date & Operator Count */}
         <div className="bg-white p-4 rounded-xl shadow mb-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -72,100 +65,29 @@ const NewPerpForm = () => {
           </div>
         </div>
 
-        {/* Section 2 */}
+        {/* Operator Details */}
         <div className="bg-gray-100 p-4 rounded-xl shadow mb-6">
           <h2 className="font-bold text-lg mb-4 bg-[#F0CB8A] p-2 rounded">Operator Details</h2>
-          {[...Array(numOperators)].map((_, index) => (
-            <div
+          {Array.from({ length: numOperators }).map((_, index) => (
+            <OperatorDetails
               key={index}
-              className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4"
-            >
-              <div>
-                <label className="block font-medium text-gray-700">Operator Name</label>
-                <select className="w-full border rounded px-3 py-2">
-                  <option>Select</option>
-                  <option>Prasanta Santra</option>
-                  <option>Raghav Roy</option>
-                  <option>Srimanta Pramanik</option>
-                </select>
-              </div>
-              <div>
-                <label className="block font-medium text-gray-700">Shift Hours</label>
-                <select
-                  className="w-full border rounded px-3 py-2"
-                  value={shiftHours[index] || ""}
-                  onChange={(e) => handleShiftHourChange(index, e.target.value)}
-                >
-                  <option>Select</option>
-                  <option>8 Hours</option>
-                  <option>12 Hours</option>
-                  <option>16 Hours</option>
-                  <option>24 Hours</option>
-                </select>
-              </div>
-              <div>
-                <label className="block font-medium text-gray-700">Shift Name</label>
-                <select className="w-full border rounded px-3 py-2">
-                  <option>Select</option>
-                  {getShiftNameOptions(shiftHours[index]).map((option, idx) => (
-                    <option key={idx}>{option}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
+              index={index}
+              value={operatorData[index]}
+              onChange={handleOperatorDataChange}
+              operatorNames={operatorNames}
+            />
           ))}
         </div>
 
-        {/* Section 3 */}
-        <div className="bg-white p-4 rounded-xl shadow mb-6">
-          <h2 className="font-bold text-lg mb-4 bg-[#F0CB8A] p-2 rounded">Total Steam Consumption Entries</h2>
-          {['Shift A', 'Shift B', 'Shift C'].map((shift, idx) => (
-            <div key={idx} className="mb-4">
-              <h3 className="font-medium text-gray-800 mb-2 bg-[#F0CB8A] p-2 rounded w-[75%] mx-auto text-center">{shift}</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-medium text-gray-700">Steam Total Open</label>
-                  <input type="text" className="w-full border rounded px-3 py-2" placeholder="Enter open value" />
-                </div>
-                <div>
-                  <label className="block font-medium text-gray-700">Steam Total Close</label>
-                  <input type="text" className="w-full border rounded px-3 py-2" placeholder="Enter close value" />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <SteamEntrySection />
+        <AmpereLoadSection />
+        <FeedingSection />
 
-        {/* Section 4 */}
-        <div className="bg-gray-100 p-4 rounded-xl shadow mb-6">
-          <h2 className="font-bold text-lg mb-4 bg-[#F0CB8A] p-2 rounded">Total Ampere Load Entries</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {['Shift A', 'Shift B', 'Shift C'].map((shift, idx) => (
-              <div key={idx}>
-                <h3 className="font-medium text-gray-800 mb-2 bg-[#F0CB8A] p-2 rounded text-center">{shift}</h3>
-                <label className="block font-medium text-gray-700">Total Ampere Load</label>
-                <input type="text" className="w-full border rounded px-3 py-2" placeholder="Enter ampere load" />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Section 5 */}
-        <div className="bg-white p-4 rounded-xl shadow mb-6">
-          <h2 className="font-bold text-lg mb-4 bg-[#F0CB8A] p-2 rounded">Total Feeding Entries</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {["Bran 21% (Local) Feeding", "Bran 20% (Raw) Feeding", "Bran 10% (Mota) Feeding", "Pora D.O.R.B. Feeding", "Valo D.O.R.B. Feeding", "Others Feeding"].map((label, idx) => (
-              <div key={idx}>
-                <label className="block font-medium text-gray-700">{label}</label>
-                <input type="text" className="w-full border rounded px-3 py-2" placeholder={`Enter ${label.toLowerCase()}`} />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Submit Button */}
         <div className="text-center">
-          <button className="bg-[#ACFD8B] text-gray-800 px-6 py-2 rounded-lg font-semibold hover:shadow-md transition duration-300">
+          <button
+            className="bg-[#ACFD8B] text-gray-800 px-6 py-2 rounded-lg font-semibold hover:shadow-md transition duration-300"
+            onClick={handleSubmit}
+          >
             Submit
           </button>
         </div>
@@ -175,5 +97,3 @@ const NewPerpForm = () => {
 };
 
 export default NewPerpForm;
-
-
