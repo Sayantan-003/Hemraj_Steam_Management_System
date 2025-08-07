@@ -1,17 +1,12 @@
-import React,  {useState} from "react";
-import OperatorDetails from "./OperatorDetails"
-import SteamEntrySection from './SteamEntrySection'
-import AmpereLoadSection from './AmpereLoadSection'
-import FeedingSection from './FeedingSection'
-import FormHeader from './FormHeader'
+import React, { useState } from "react";
+import OperatorDetails from "./OperatorDetails";
+import SteamEntrySection from "./SteamEntrySection";
+import AmpereLoadSection from "./AmpereLoadSection";
+import FeedingSection from "./FeedingSection";
+import FormHeader from "./FormHeader";
+import prepOperatorNames from "../../../constants/prepOperatorNames";
 
-
-
-const operatorNames = [
-  "Prasanta Santra",
-  "Raghav Roy",
-  "Srimanta Pramanik"
-];
+const operatorNames = prepOperatorNames;
 
 const NewPerpForm = () => {
   const [numOperators, setNumOperators] = useState(1);
@@ -38,10 +33,15 @@ const NewPerpForm = () => {
   };
 
   return (
-    <div className="p-6 min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/your-background-image.jpg')" }}>
+    <div
+      className="p-6 min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: "url('/your-background-image.jpg')" }}
+    >
       <div className="bg-[#EEE5D5] p-6 rounded-lg shadow-lg">
-
-        <FormHeader title="Operator Performance Form" subtitle="(Prep Section)" />
+        <FormHeader
+          title="Operator Performance Form"
+          subtitle="(Prep Section)"
+        />
 
         {/* Date & Operator Count */}
         <div className="bg-white p-4 rounded-xl shadow mb-4">
@@ -51,7 +51,9 @@ const NewPerpForm = () => {
               <input type="date" className="w-full border rounded px-3 py-2" />
             </div>
             <div>
-              <label className="block font-medium text-gray-700">Number of Operator Present</label>
+              <label className="block font-medium text-gray-700">
+                Number of Operator Present
+              </label>
               <select
                 className="w-full border rounded px-3 py-2"
                 value={numOperators}
@@ -67,7 +69,9 @@ const NewPerpForm = () => {
 
         {/* Operator Details */}
         <div className="bg-gray-100 p-4 rounded-xl shadow mb-6">
-          <h2 className="font-bold text-lg mb-4 bg-[#F0CB8A] p-2 rounded">Operator Details</h2>
+          <h2 className="font-bold text-lg mb-4 bg-[#F0CB8A] p-2 rounded">
+            Operator Details
+          </h2>
           {Array.from({ length: numOperators }).map((_, index) => (
             <OperatorDetails
               key={index}

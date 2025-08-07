@@ -3,8 +3,9 @@ import OperatorSection from "./OperatorSection";
 import LabReportSection from "./LabReportSection";
 import SteamSection from "./SteamSection";
 import ProductionSection from "./ProductionSection";
+import solventOperatorNames from "../../../constants/solventOperatorNames";
 
-const operatorNames = ["Operator 1", "Operator 2", "Operator 3"];
+const operatorNames = solventOperatorNames;
 
 const NewSolventForm = () => {
   const [date, setDate] = useState("");
