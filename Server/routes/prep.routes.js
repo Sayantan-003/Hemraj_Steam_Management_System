@@ -1,25 +1,11 @@
-const express = require('express');
+import express from 'express';
+import { createPrepEntry } from '../controllers/prep.controller.js';
+import { authMiddleware } from '../middlewares/authMiddleware.js';
+import { validatePrepData } from '../middlewares/validatePrepData.js';
+
 const router = express.Router();
-const prepController = require('../controllers/prep.controllers');
 
-// @route   POST /api/prep
-// @desc    Create a new Prep log entry
-router.post('/', prepController.createPrepLog);
+// POST /api/prep
+router.post('/', authMiddleware, validatePrepData, createPrepEntry);
 
-// @route   GET /api/prep
-// @desc    Get all Prep log entries
-router.get('/', prepController.getAllPrepLogs);
-
-// @route   GET /api/prep/:id
-// @desc    Get a single Prep log by ID
-router.get('/:id', prepController.getPrepLogById);
-
-// @route   PUT /api/prep/:id
-// @desc    Update a Prep log by ID
-router.put('/:id', prepController.updatePrepLog);
-
-// @route   DELETE /api/prep/:id
-// @desc    Delete a Prep log by ID
-router.delete('/:id', prepController.deletePrepLog);
-
-module.exports = router;
+export default router;

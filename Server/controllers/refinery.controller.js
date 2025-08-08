@@ -64,3 +64,30 @@ exports.deleteLog = async (req, res) => {
     res.status(500).json({ message: 'Failed to delete log.', error });
   }
 };
+
+
+const DegumLog = require('../models/degumLog.model');
+
+exports.createDegumLog = async (req, res) => {
+  try {
+    const { date, operators } = req.body;
+
+    if (!date || !Array.isArray(operators) || operators.length === 0) {
+      return res.status(400).json({ error: 'Invalid data submitted' });
+    }
+
+    const newLog = new DegumLog({
+      date,
+      section: "Degumming & Bleaching",
+      operators
+    });
+
+    await newLog.save();
+    res.status(201).json({ message: 'Degum log saved successfully', data: newLog });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error while saving degum log' });
+  }
+};
+
+

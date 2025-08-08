@@ -22,4 +22,15 @@ const authorize = (roles) => (req, res, next) => {
   next();
 };
 
+
+export const authMiddleware = (req, res, next) => {
+  // Replace this with real token check if needed
+  const authorized = true; // mock
+  if (!authorized) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  next();
+};
+
+
 module.exports = { authenticate, authorize };
