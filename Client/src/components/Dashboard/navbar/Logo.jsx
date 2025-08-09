@@ -10,8 +10,8 @@ const Logo = () => {
           
       </div>
       <div className="flex flex-col">
-        <span className="text-xl font-bold text-gray-800 leading-tight">SteamFlow</span>
-        <span className="text-xs text-gray-500 leading-tight">Management System</span>
+        <span className="text-xl font-medium text-gray-800 leading-tight">Operator</span>
+        <span className="text-xs font-semibold text-gray-500 leading-tight">Performance System</span>
       </div>
     </div>
   );

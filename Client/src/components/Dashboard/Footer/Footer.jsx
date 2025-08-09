@@ -178,12 +178,12 @@ const Footer = () => {
                 <div className="bg-blue-100 p-2 rounded-lg">
                   <Phone className="h-5 w-5 text-blue-600" />
                 </div>
-                <div className="text-left">
-                  <span className="font-medium text-gray-900 block">Phone</span>
-                  <p>+91 (123) 456-7890</p>
+                <div className="text-left flex flex-wrap">
+                  <span className="font-medium text-gray-900">Phone</span>
+                  <p>+91 (+91) 3322298038/40649316/22654742/22292340</p>
                 </div>
               </li>
-              <li className="flex items-start space-x-4 text-sm text-gray-600">
+              {/* <li className="flex items-start space-x-4 text-sm text-gray-600">
                 <div className="bg-blue-100 p-2 rounded-lg">
                   <Mail className="h-5 w-5 text-blue-600" />
                 </div>
@@ -191,14 +191,14 @@ const Footer = () => {
                   <span className="font-medium text-gray-900 block">Email</span>
                   <p>contact@hemrajsteam.com</p>
                 </div>
-              </li>
+              </li> */}
               <li className="flex items-start space-x-4 text-sm text-gray-600">
                 <div className="bg-blue-100 p-2 rounded-lg">
                   <MapPin className="h-5 w-5 text-blue-600" />
                 </div>
                 <div className="text-left">
                   <span className="font-medium text-gray-900 block">Address</span>
-                  <p>123 Industrial Area, Mumbai, Maharashtra, India</p>
+                  <p> 46B, Rafi Ahmed Kidwai Road(1st Floor),Kolkata - 700016</p>
                 </div>
               </li>
             </ul>
@@ -225,7 +225,7 @@ const Footer = () => {
                   <span className="font-medium text-gray-900">Weekend</span>
                 </div>
                 <p className="text-sm text-gray-600 ml-8">Saturday</p>
-                <p className="text-sm text-gray-600 ml-8">9:00 AM - 3:00 PM</p>
+                <p className="text-sm text-gray-600 ml-8">9:00 AM - 4:00 PM</p>
               </div>
             </div>
           </div>
