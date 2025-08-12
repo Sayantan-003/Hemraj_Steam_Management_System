@@ -1,4 +1,4 @@
-# Hemraj Steam Management System (HSMS)
+# Hemraj Steam And Operator Management System (HSMS)
 
 A modern, professional web application for real-time monitoring, analytics, and management of industrial steam systems.
 
