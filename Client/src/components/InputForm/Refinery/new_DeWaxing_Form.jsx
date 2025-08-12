@@ -1,55 +1,93 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 
-const New_DeWaxing_Form = () => {
-  const [date, setDate] = useState("");
-  const [numOperators, setNumOperators] = useState("1");
-
-  const [operatorDetails, setOperatorDetails] = useState([
-    { name: "", shiftHours: "", shiftName: "" },
-  ]);
+const New_DeWaxing_Form = ({ onDataChange = () => {} }) => {
+  const [formData, setFormData] = useState({
+    date: '',
+    numOperators: '1',
+    operators: [{ name: '', shiftHours: '', shiftName: '', shifts: [] }]
+  });
 
   const [crystallizer, setCrystallizer] = useState({
-    rawWaterStart: "",
-    filterStop: "",
+    rawWaterStart: '',
+    filterStop: '',
   });
 
   const [dipGap, setDipGap] = useState({
-    A: ["", "", "", ""],
-    B: ["", "", "", ""],
-    C: ["", "", "", ""],
+    A: ['', '', '', ''],
+    B: ['', '', '', ''],
+    C: ['', '', '', ''],
   });
 
   const [cloudyTanks, setCloudyTanks] = useState({
-    A: "",
-    B: "",
-    C: "",
+    A: '',
+    B: '',
+    C: '',
   });
 
   const shiftNameOptions = {
-    "8": ["Shift A", "Shift B", "Shift C"],
-    "12": [
-      "Shift A + Shift B(1/2)",
-      "Shift B + Shift C(1/2)",
-      "Shift C + Shift A(1/2)",
-      "Shift A(1/2) + Shift B",
-      "Shift B(1/2) + Shift C",
-      "Shift C(1/2) + Shift A",
+    '8': ['Shift A', 'Shift B', 'Shift C'],
+    '12': [
+      'Shift A + Shift B(1/2)',
+      'Shift B + Shift C(1/2)',
+      'Shift C + Shift A(1/2)',
+      'Shift A(1/2) + Shift B',
+      'Shift B(1/2) + Shift C',
+      'Shift C(1/2) + Shift A',
     ],
-    "16": ["Shift A + Shift B", "Shift B + Shift C", "Shift C + Shift A"],
-    "24": ["Shift A + Shift B + Shift C"],
+    '16': ['Shift A + Shift B', 'Shift B + Shift C', 'Shift C + Shift A'],
+    '24': ['Shift A + Shift B + Shift C'],
+  };
+
+  const getShiftSubparts = (shiftName) => {
+    if (shiftName === 'Shift A + Shift B(1/2)' || shiftName === 'Shift A(1/2) + Shift B' || shiftName === 'Shift A + Shift B') return ['Shift A', 'Shift B'];
+    if (shiftName === 'Shift B + Shift C(1/2)' || shiftName === 'Shift B(1/2) + Shift C' || shiftName === 'Shift B + Shift C') return ['Shift B', 'Shift C'];
+    if (shiftName === 'Shift C + Shift A(1/2)' || shiftName === 'Shift C(1/2) + Shift A' || shiftName === 'Shift C + Shift A') return ['Shift C', 'Shift A'];
+    if (shiftName === 'Shift A + Shift B + Shift C') return ['Shift A', 'Shift B', 'Shift C'];
+    if (['Shift A', 'Shift B', 'Shift C'].includes(shiftName)) return [shiftName];
+    return [];
   };
 
   const handleOperatorChange = (index, field, value) => {
-    const newDetails = [...operatorDetails];
-    newDetails[index][field] = value;
-    setOperatorDetails(newDetails);
+    setFormData(prev => {
+      const newOperators = [...prev.operators];
+      newOperators[index] = { ...newOperators[index], [field]: value };
+      
+      // Reset shift name when shift hours change
+      if (field === 'shiftHours') {
+        newOperators[index].shiftName = '';
+        newOperators[index].shifts = [];
+      }
+      
+      // Update shifts when shift name changes
+      if (field === 'shiftName' && value) {
+        const shiftSubparts = getShiftSubparts(value);
+        newOperators[index].shifts = shiftSubparts.map(shiftName => ({
+          shiftName,
+          dewaxTanks: {
+            tank1: dipGap[shiftName.split(' ')[1]] ? parseFloat(dipGap[shiftName.split(' ')[1]][0]) || 0 : 0,
+            tank2: dipGap[shiftName.split(' ')[1]] ? parseFloat(dipGap[shiftName.split(' ')[1]][1]) || 0 : 0,
+            tank3: dipGap[shiftName.split(' ')[1]] ? parseFloat(dipGap[shiftName.split(' ')[1]][2]) || 0 : 0,
+            tank4: dipGap[shiftName.split(' ')[1]] ? parseFloat(dipGap[shiftName.split(' ')[1]][3]) || 0 : 0
+          },
+          cloudyTank: parseFloat(cloudyTanks[shiftName.split(' ')[1]]) || 0
+        }));
+      }
+      
+      return { ...prev, operators: newOperators };
+    });
   };
 
   const handleNumOperatorChange = (value) => {
-    setNumOperators(value);
     const num = parseInt(value);
-    const details = Array(num).fill({ name: "", shiftHours: "", shiftName: "" });
-    setOperatorDetails(details);
+    const newOperators = Array(num).fill(null).map((_, idx) => 
+      formData.operators[idx] || { name: '', shiftHours: '', shiftName: '', shifts: [] }
+    );
+    
+    setFormData(prev => ({
+      ...prev,
+      numOperators: value,
+      operators: newOperators
+    }));
   };
 
   const handleDipGapChange = (shift, index, value) => {
@@ -59,8 +97,53 @@ const New_DeWaxing_Form = () => {
   };
 
   const handleCloudyChange = (shift, value) => {
-    setCloudyTanks((prev) => ({ ...prev, [shift]: value }));
+    setCloudyTanks(prev => ({ ...prev, [shift]: value }));
   };
+
+  const handleDateChange = (value) => {
+    setFormData(prev => ({ ...prev, date: value }));
+  };
+
+  // Update parent whenever formData or shift data changes
+  useEffect(() => {
+    // Update operators with latest shift data
+    const updatedOperators = formData.operators.map(operator => {
+      if (operator.shiftName) {
+        const shiftSubparts = getShiftSubparts(operator.shiftName);
+        const shifts = shiftSubparts.map(shiftName => {
+          const shiftLetter = shiftName.split(' ')[1]; // Extract A, B, or C
+          return {
+            shiftName,
+            crystallizer: {
+              rawWaterStart: crystallizer.rawWaterStart,
+              filterStop: crystallizer.filterStop
+            },
+            dewaxTanks: {
+              tank1: parseFloat(dipGap[shiftLetter][0]) || 0,
+              tank2: parseFloat(dipGap[shiftLetter][1]) || 0,
+              tank3: parseFloat(dipGap[shiftLetter][2]) || 0,
+              tank4: parseFloat(dipGap[shiftLetter][3]) || 0
+            },
+            cloudyTank: parseFloat(cloudyTanks[shiftLetter]) || 0
+          };
+        });
+        return { ...operator, shifts };
+      }
+      return operator;
+    });
+
+    const outputData = {
+      date: formData.date,
+      crystallizer,
+      operators: updatedOperators.map(op => ({
+        name: op.name,
+        shiftHours: parseInt(op.shiftHours) || 0,
+        shifts: op.shifts || []
+      }))
+    };
+
+    onDataChange(outputData);
+  }, [formData, crystallizer, dipGap, cloudyTanks, onDataChange]);
 
   return (
     <div className="bg-white rounded-xl shadow-md p-6 mb-6">
@@ -75,15 +158,15 @@ const New_DeWaxing_Form = () => {
           <input
             type="date"
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
+            value={formData.date}
+            onChange={(e) => handleDateChange(e.target.value)}
           />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">Number of Operator Present</label>
           <select
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            value={numOperators}
+            value={formData.numOperators}
             onChange={(e) => handleNumOperatorChange(e.target.value)}
           >
             <option value="1">1</option>
@@ -93,56 +176,55 @@ const New_DeWaxing_Form = () => {
         </div>
       </div>
 
-        {/* Section 2: Operator Details */}
-        <div className="mb-6">
+      {/* Section 2: Operator Details */}
+      <div className="mb-6">
         <h3 className="font-semibold text-gray-800 mb-4 px-3 py-2 rounded-md" style={{ backgroundColor: "#FFE95B" }}>Operator Details</h3>
-        {operatorDetails.map((op, idx) => (
-            <div key={idx} className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+        {formData.operators.map((op, idx) => (
+          <div key={idx} className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
             <div>
-                <label className="block text-sm font-medium text-gray-700">Operator Name</label>
-                <select
+              <label className="block text-sm font-medium text-gray-700">Operator Name</label>
+              <select
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 value={op.name}
                 onChange={(e) => handleOperatorChange(idx, "name", e.target.value)}
-                >
+              >
                 <option value="">Select</option>
                 <option value="Arup Dalui">Arup Dalui</option>
                 <option value="Abhijit Dutta">Abhijit Dutta</option>
                 <option value="Raju Mukhia">Raju Mukhia</option>
-                </select>
+              </select>
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-700">Shift Hours</label>
-                <select
+              <label className="block text-sm font-medium text-gray-700">Shift Hours</label>
+              <select
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 value={op.shiftHours}
                 onChange={(e) => handleOperatorChange(idx, "shiftHours", e.target.value)}
-                >
+              >
                 <option value="">Select</option>
                 <option value="8">8 Hours</option>
                 <option value="12">12 Hours</option>
                 <option value="16">16 Hours</option>
                 <option value="24">24 Hours</option>
-                </select>
+              </select>
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-700">Shift Name</label>
-                <select
+              <label className="block text-sm font-medium text-gray-700">Shift Name</label>
+              <select
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 value={op.shiftName}
                 onChange={(e) => handleOperatorChange(idx, "shiftName", e.target.value)}
                 disabled={!op.shiftHours}
-                >
+              >
                 <option value="">Select</option>
                 {shiftNameOptions[op.shiftHours]?.map((name) => (
-                    <option key={name} value={name}>{name}</option>
+                  <option key={name} value={name}>{name}</option>
                 ))}
-                </select>
+              </select>
             </div>
-            </div>
+          </div>
         ))}
-        </div>
-
+      </div>
 
       {/* Section 3: Crystallizer */}
       <div className="bg-gray-50 rounded-lg p-4 shadow mb-6">

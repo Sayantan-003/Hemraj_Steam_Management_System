@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const New_DeGum_Bleach_Form = () => {
-  const [numOperators, setNumOperators] = useState('');
-  const [shiftHoursList, setShiftHoursList] = useState(['']);
-  const [shiftNameList, setShiftNameList] = useState(['']);
+const New_DeGum_Bleach_Form = ({ onDataChange = () => {} }) => {
+  const [formData, setFormData] = useState({
+    date: '',
+    numOperators: '',
+    operators: []
+  });
 
   const shiftNameOptions = {
     '8': ['Shift A', 'Shift B', 'Shift C'],
@@ -28,12 +30,103 @@ const New_DeGum_Bleach_Form = () => {
     return [];
   };
 
+  // Initialize shift data for all operators
+  const [shiftData, setShiftData] = useState({
+    'Shift A': { cot3: '', cot4: '', bleacher1: '', bleacher2: '', bleacher3: '' },
+    'Shift B': { cot3: '', cot4: '', bleacher1: '', bleacher2: '', bleacher3: '' },
+    'Shift C': { cot3: '', cot4: '', bleacher1: '', bleacher2: '', bleacher3: '' }
+  });
+
   const handleNumOperatorsChange = (value) => {
-    setNumOperators(value);
     const count = parseInt(value || 0);
-    setShiftHoursList(Array(count).fill(''));
-    setShiftNameList(Array(count).fill(''));
+    const newOperators = Array(count).fill(null).map((_, idx) => 
+      formData.operators[idx] || { name: '', shiftHours: '', shiftName: '', shifts: [] }
+    );
+    
+    setFormData(prev => ({
+      ...prev,
+      numOperators: value,
+      operators: newOperators
+    }));
   };
+
+  const handleOperatorChange = (index, field, value) => {
+    setFormData(prev => {
+      const newOperators = [...prev.operators];
+      newOperators[index] = { ...newOperators[index], [field]: value };
+      
+      // Reset shift name when shift hours change
+      if (field === 'shiftHours') {
+        newOperators[index].shiftName = '';
+        newOperators[index].shifts = [];
+      }
+      
+      // Update shifts when shift name changes
+      if (field === 'shiftName' && value) {
+        const shiftSubparts = getShiftSubparts(value);
+        newOperators[index].shifts = shiftSubparts.map(shiftName => ({
+          shiftName,
+          cotTanks: { 
+            cot3: parseInt(shiftData[shiftName].cot3) || 0, 
+            cot4: parseInt(shiftData[shiftName].cot4) || 0 
+          },
+          bleacherTanks: { 
+            bleacher1: parseInt(shiftData[shiftName].bleacher1) || 0, 
+            bleacher2: parseInt(shiftData[shiftName].bleacher2) || 0, 
+            bleacher3: parseInt(shiftData[shiftName].bleacher3) || 0 
+          }
+        }));
+      }
+      
+      return { ...prev, operators: newOperators };
+    });
+  };
+
+  const handleShiftDataChange = (shiftName, field, value) => {
+    setShiftData(prev => ({
+      ...prev,
+      [shiftName]: { ...prev[shiftName], [field]: value }
+    }));
+  };
+
+  const handleDateChange = (value) => {
+    setFormData(prev => ({ ...prev, date: value }));
+  };
+
+  // Update parent whenever formData or shiftData changes
+  useEffect(() => {
+    // Update operators with latest shift data
+    const updatedOperators = formData.operators.map(operator => {
+      if (operator.shiftName) {
+        const shiftSubparts = getShiftSubparts(operator.shiftName);
+        const shifts = shiftSubparts.map(shiftName => ({
+          shiftName,
+          cotTanks: { 
+            cot3: parseInt(shiftData[shiftName].cot3) || 0, 
+            cot4: parseInt(shiftData[shiftName].cot4) || 0 
+          },
+          bleacherTanks: { 
+            bleacher1: parseInt(shiftData[shiftName].bleacher1) || 0, 
+            bleacher2: parseInt(shiftData[shiftName].bleacher2) || 0, 
+            bleacher3: parseInt(shiftData[shiftName].bleacher3) || 0 
+          }
+        }));
+        return { ...operator, shifts };
+      }
+      return operator;
+    });
+
+    const outputData = {
+      date: formData.date,
+      operators: updatedOperators.map(op => ({
+        name: op.name,
+        shiftHours: parseInt(op.shiftHours) || 0,
+        shifts: op.shifts || []
+      }))
+    };
+
+    onDataChange(outputData);
+  }, [formData, shiftData, onDataChange]);
 
   return (
     <>
@@ -53,13 +146,18 @@ const New_DeGum_Bleach_Form = () => {
         <div className="bg-gray-50 rounded-lg p-4 shadow mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">Date</label>
-            <input type="date" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+            <input 
+              type="date" 
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              value={formData.date}
+              onChange={(e) => handleDateChange(e.target.value)}
+            />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">Number of Operator Present</label>
             <select
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              value={numOperators}
+              value={formData.numOperators}
               onChange={(e) => handleNumOperatorsChange(e.target.value)}
             >
               <option value="">Select</option>
@@ -74,15 +172,19 @@ const New_DeGum_Bleach_Form = () => {
         <div className="bg-gray-50 rounded-lg p-4 shadow mb-6">
           <h3 className="font-semibold text-gray-800 mb-4 px-3 py-2 rounded-md" style={{ backgroundColor: '#FFE95B' }}>Operator Details</h3>
 
-          {[...Array(parseInt(numOperators || 0))].map((_, idx) => (
+          {[...Array(parseInt(formData.numOperators || 0))].map((_, idx) => (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4" key={idx}>
               <div>
                 <label className="block text-sm font-medium text-gray-700">Operator Name</label>
-                <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                <select 
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  value={formData.operators[idx]?.name || ''}
+                  onChange={(e) => handleOperatorChange(idx, 'name', e.target.value)}
+                >
                   <option value="">Select</option>
-                  <option value="Sahadeb Adhikary">Sahadev Adhikary</option>
+                  <option value="Sahadev Adhikary">Sahadev Adhikary</option>
                   <option value="Biplab Pal">Biplab Pal</option>
-                  <option value="Abhijit Doloui">Abhijit Dalui</option>
+                  <option value="Abhijit Dalui">Abhijit Dalui</option>
                 </select>
               </div>
 
@@ -90,16 +192,8 @@ const New_DeGum_Bleach_Form = () => {
                 <label className="block text-sm font-medium text-gray-700">Shift Hours</label>
                 <select
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                  value={shiftHoursList[idx]}
-                  onChange={(e) => {
-                    const newHours = [...shiftHoursList];
-                    newHours[idx] = e.target.value;
-                    setShiftHoursList(newHours);
-
-                    const newShiftNames = [...shiftNameList];
-                    newShiftNames[idx] = '';
-                    setShiftNameList(newShiftNames);
-                  }}
+                  value={formData.operators[idx]?.shiftHours || ''}
+                  onChange={(e) => handleOperatorChange(idx, 'shiftHours', e.target.value)}
                 >
                   <option value="">Select</option>
                   <option value="8">8 Hours</option>
@@ -113,16 +207,12 @@ const New_DeGum_Bleach_Form = () => {
                 <label className="block text-sm font-medium text-gray-700">Shift Name</label>
                 <select
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                  value={shiftNameList[idx]}
-                  onChange={(e) => {
-                    const newShiftNames = [...shiftNameList];
-                    newShiftNames[idx] = e.target.value;
-                    setShiftNameList(newShiftNames);
-                  }}
-                  disabled={!shiftHoursList[idx]}
+                  value={formData.operators[idx]?.shiftName || ''}
+                  onChange={(e) => handleOperatorChange(idx, 'shiftName', e.target.value)}
+                  disabled={!formData.operators[idx]?.shiftHours}
                 >
                   <option value="">Select</option>
-                  {shiftHoursList[idx] && shiftNameOptions[shiftHoursList[idx]]?.map((name) => (
+                  {formData.operators[idx]?.shiftHours && shiftNameOptions[formData.operators[idx].shiftHours]?.map((name) => (
                     <option key={name} value={name}>{name}</option>
                   ))}
                 </select>
@@ -148,6 +238,8 @@ const New_DeGum_Bleach_Form = () => {
                     type="number"
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                     placeholder={`Enter value for COT 3 in ${shiftLabel}`}
+                    value={shiftData[shiftLabel].cot3}
+                    onChange={(e) => handleShiftDataChange(shiftLabel, 'cot3', e.target.value)}
                   />
                 </div>
                 <div>
@@ -156,6 +248,8 @@ const New_DeGum_Bleach_Form = () => {
                     type="number"
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                     placeholder={`Enter value for COT 4 in ${shiftLabel}`}
+                    value={shiftData[shiftLabel].cot4}
+                    onChange={(e) => handleShiftDataChange(shiftLabel, 'cot4', e.target.value)}
                   />
                 </div>
               </div>
@@ -174,13 +268,15 @@ const New_DeGum_Bleach_Form = () => {
                 {shiftLabel}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {['Bleacher 1', 'Bleacher 2', 'Bleacher 3'].map((bleacher, i) => (
+                {['bleacher1', 'bleacher2', 'bleacher3'].map((bleacher, i) => (
                   <div key={i}>
-                    <label className="block text-sm font-medium text-gray-700">Dip/Gap of {bleacher}</label>
+                    <label className="block text-sm font-medium text-gray-700">Dip/Gap of Bleacher {i + 1}</label>
                     <input
                       type="number"
                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                      placeholder={`Enter value for ${bleacher} in ${shiftLabel}`}
+                      placeholder={`Enter value for Bleacher ${i + 1} in ${shiftLabel}`}
+                      value={shiftData[shiftLabel][bleacher]}
+                      onChange={(e) => handleShiftDataChange(shiftLabel, bleacher, e.target.value)}
                     />
                   </div>
                 ))}

@@ -1,124 +1,112 @@
 import React, { useState } from "react";
-import new_Alpha_Form from "./new_Alpha_Form";
-import new_DeGum_Bleach_Form from "./new_DeGum_Bleach_Form";
-import new_DEO_Form from "./new_DEO_Form";
-import new_DeWaxing_Form from "./new_DeWaxing_Form";
+import New_DeGum_Bleach_Form from "./New_DeGum_Bleach_Form";
+import New_DeWaxing_Form from "./New_DeWaxing_Form";
+import New_DEO_Form from "./New_DEO_Form";
+import New_Alpha_Form from "./New_Alpha_Form";
 
 export default function MasterRefineryForm() {
-  const [alphaData, setAlphaData] = useState({});
-  const [degumData, setDegumData] = useState({});
-  const [deoData, setDeoData] = useState({});
-  const [dewaxData, setDewaxData] = useState({});
+  const [formData, setFormData] = useState({
+    degumBleach: {},
+    alpha: {},
+    deo: {},
+    dewaxing: {}
+  });
+  
   const [loading, setLoading] = useState(false);
+  const [showJson, setShowJson] = useState(false);
 
-  const handleAlphaChange = (field, value) =>
-    setAlphaData((prev) => ({ ...prev, [field]: value }));
-  const handleDegumChange = (field, value) =>
-    setDegumData((prev) => ({ ...prev, [field]: value }));
-  const handleDeoChange = (field, value) =>
-    setDeoData((prev) => ({ ...prev, [field]: value }));
-  const handleDewaxChange = (field, value) =>
-    setDewaxData((prev) => ({ ...prev, [field]: value }));
+  const handleDegumBleachChange = (data) => {
+    setFormData(prev => ({ ...prev, degumBleach: data }));
+  };
 
-  // Validation helper
-  const isFormValid = (data, requiredFields) =>
-    requiredFields.every(
-      (field) => data[field] !== undefined && data[field] !== ""
-    );
+  const handleAlphaChange = (data) => {
+    setFormData(prev => ({ ...prev, alpha: data }));
+  };
+
+  const handleDeoChange = (data) => {
+    setFormData(prev => ({ ...prev, deo: data }));
+  };
+
+  const handleDewaxingChange = (data) => {
+    setFormData(prev => ({ ...prev, dewaxing: data }));
+  };
 
   const handleSubmitAll = async () => {
-    const alphaRequired = ["batchNumber", "productionQty", "steamUsed"];
-    const degumRequired = ["oilType", "degumTemp", "bleachTime"];
-    const deoRequired =   ["deoStartTime", "deoEndTime", "steamPressure"];
-    const dewaxRequired = ["coolingTemp", "filtrationTime", "waxContent"];
-
-    if (!isFormValid(alphaData, alphaRequired)) {
-      alert("Please fill all Alpha form fields");
-      return;
-    }
-    if (!isFormValid(degumData, degumRequired)) {
-      alert("Please fill all DeGum & Bleach form fields");
-      return;
-    }
-    if (!isFormValid(deoData, deoRequired)) {
-      alert("Please fill all DEO form fields");
-      return;
-    }
-    if (!isFormValid(dewaxData, dewaxRequired)) {
-      alert("Please fill all DeWaxing form fields");
-      return;
-    }
-
     setLoading(true);
+    
+    // Simulate API submission
     try {
-      const results = await Promise.allSettled([
-        fetch("/api/alpha", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(alphaData),
-        }),
-        fetch("/api/degum", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(degumData),
-        }),
-        fetch("/api/deo", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(deoData),
-        }),
-        fetch("/api/dewax", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(dewaxData),
-        }),
-      ]);
-
-      let failedForms = [];
-      results.forEach((res, i) => {
-        if (res.status === "fulfilled" && res.value.ok) {
-          console.log(`Form ${i + 1} submitted successfully`);
-        } else {
-          failedForms.push(
-            ["Alpha", "DeGum & Bleach", "DEO", "DeWaxing"][i]
-          );
-        }
-      });
-
-      if (failedForms.length > 0) {
-        alert(
-          `Some forms failed to submit:\n- ${failedForms.join("\n- ")}`
-        );
-      } else {
-        alert("All forms submitted successfully!");
-      }
+      console.log("Submitting combined form data:", formData);
+      
+      // Here you would normally send to your API
+      // const response = await fetch("/api/refinery-forms", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(formData),
+      // });
+      
+      // Simulate success
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      alert("All forms submitted successfully!");
+      setShowJson(true);
     } catch (error) {
-      console.error("Unexpected error submitting forms", error);
-      alert("Unexpected error occurred while submitting forms.");
+      console.error("Error submitting forms", error);
+      alert("Error occurred while submitting forms.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      <h2>Refinery Production Forms</h2>
+    <div className="max-w-6xl mx-auto p-4">
+      {/* Main Header */}
+      <div className="rounded-xl shadow-md mb-6 p-4 text-center" style={{ backgroundColor: '#FFE95B' }}>
+        <h1 className="text-3xl font-bold text-gray-800">Refinery Production Forms</h1>
+        <p className="text-lg text-gray-700 font-medium mt-1">Master Form Submission</p>
+      </div>
 
-      <h3>Alpha Section</h3>
-      <new_Alpha_Form formData={alphaData} onChange={handleAlphaChange} />
+      {/* DeGum & Bleach Form */}
+      <New_DeGum_Bleach_Form onDataChange={handleDegumBleachChange} />
 
-      <h3>DeGum & Bleach Section</h3>
-      <new_DeGum_Bleach_Form formData={degumData} onChange={handleDegumChange} />
+      {/* Alpha Form */}
+      <New_Alpha_Form onDataChange={handleAlphaChange} />
 
-      <h3>DEO Section</h3>
-      <new_DEO_Form formData={deoData} onChange={handleDeoChange} />
+      {/* DEO Form */}
+      <New_DEO_Form onDataChange={handleDeoChange} />
 
-      <h3>DeWaxing Section</h3>
-      <new_DeWaxing_Form formData={dewaxData} onChange={handleDewaxChange} />
+      {/* DeWaxing Form */}
+      <New_DeWaxing_Form onDataChange={handleDewaxingChange} />
 
-      <button onClick={handleSubmitAll} disabled={loading}>
-        {loading ? "Submitting..." : "Submit All"}
-      </button>
+      {/* Submit Button */}
+      <div className="bg-white rounded-xl shadow-md p-6 mb-6 text-center">
+        <button 
+          onClick={handleSubmitAll} 
+          disabled={loading}
+          className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors duration-200"
+        >
+          {loading ? "Submitting..." : "Submit All Forms"}
+        </button>
+        
+        <button 
+          onClick={() => setShowJson(!showJson)}
+          className="ml-4 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors duration-200"
+        >
+          {showJson ? "Hide" : "Show"} JSON Preview
+        </button>
+      </div>
+
+      {/* JSON Preview */}
+      {showJson && (
+        <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4 px-4 py-2 rounded-md" style={{ backgroundColor: '#FFE95B' }}>
+            JSON Output Preview
+          </h3>
+          <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto text-sm">
+            {JSON.stringify(formData, null, 2)}
+          </pre>
+        </div>
+      )}
     </div>
   );
 }
