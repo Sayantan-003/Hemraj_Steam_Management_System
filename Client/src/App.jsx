@@ -28,7 +28,11 @@ import RefineryFormPage from "./pages/RefineryFormPage.jsx";
 
 //Error Pages
 import NotFound404 from "./components/ErrorPages/NotFound404.jsx";
-import InternalServer500 from "./components/ErrorPages/InternalServer500.jsx"; // ← NEW
+import InternalServer500 from "./components/ErrorPages/InternalServer500.jsx"; 
+
+
+//Utility Pages
+import SuccessPage from "./components/utils/SuccessPage.jsx";
 
 const App = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -86,6 +90,10 @@ const App = () => {
         {/*Error Pages */}
         <Route path="*" element={<NotFound404 />} />
         <Route path="/500" element={<InternalServer500 />} />
+
+
+        {/* Submit Page */}
+        <Route path = "/success" element={<SuccessPage/>} />
       </Routes>
     </BrowserRouter>
   );

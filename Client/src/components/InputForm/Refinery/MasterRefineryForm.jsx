@@ -1,10 +1,18 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import New_DeGum_Bleach_Form from "./New_DeGum_Bleach_Form";
 import New_DeWaxing_Form from "./New_DeWaxing_Form";
 import New_DEO_Form from "./New_DEO_Form";
-import New_Alpha_Form from "./New_Alpha_Form";
+import New_Alpha_Form from "./New_Alfa_Form";
+
+import SuccessPage from "../../utils/SuccessPage";
+
+
 
 export default function MasterRefineryForm() {
+
+  
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     degumBleach: {},
     alpha: {},
@@ -14,6 +22,7 @@ export default function MasterRefineryForm() {
   
   const [loading, setLoading] = useState(false);
   const [showJson, setShowJson] = useState(false);
+  const [showSuccessPage, setShowSuccessPage] = useState(false);
 
   const handleDegumBleachChange = (data) => {
     setFormData(prev => ({ ...prev, degumBleach: data }));
@@ -50,6 +59,7 @@ export default function MasterRefineryForm() {
       
       alert("All forms submitted successfully!");
       setShowJson(true);
+      setShowSuccessPage(true);
     } catch (error) {
       console.error("Error submitting forms", error);
       alert("Error occurred while submitting forms.");
@@ -58,13 +68,15 @@ export default function MasterRefineryForm() {
     }
   };
 
+   if (showSuccessPage) {
+     navigate('/success');
+  }
+  
+
+
+
   return (
     <div className="max-w-6xl mx-auto p-4">
-      {/* Main Header */}
-      <div className="rounded-xl shadow-md mb-6 p-4 text-center" style={{ backgroundColor: '#FFE95B' }}>
-        <h1 className="text-3xl font-bold text-gray-800">Refinery Production Forms</h1>
-        <p className="text-lg text-gray-700 font-medium mt-1">Master Form Submission</p>
-      </div>
 
       {/* DeGum & Bleach Form */}
       <New_DeGum_Bleach_Form onDataChange={handleDegumBleachChange} />
@@ -72,25 +84,25 @@ export default function MasterRefineryForm() {
       {/* Alpha Form */}
       <New_Alpha_Form onDataChange={handleAlphaChange} />
 
-      {/* DEO Form */}
-      <New_DEO_Form onDataChange={handleDeoChange} />
-
       {/* DeWaxing Form */}
       <New_DeWaxing_Form onDataChange={handleDewaxingChange} />
+
+       {/* DEO Form */}
+      <New_DEO_Form onDataChange={handleDeoChange} />
 
       {/* Submit Button */}
       <div className="bg-white rounded-xl shadow-md p-6 mb-6 text-center">
         <button 
           onClick={handleSubmitAll} 
           disabled={loading}
-          className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors duration-200"
+          className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold py-3 px-8 rounded-sm text-sm transition-colors duration-200"
         >
           {loading ? "Submitting..." : "Submit All Forms"}
         </button>
         
         <button 
           onClick={() => setShowJson(!showJson)}
-          className="ml-4 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors duration-200"
+          className="ml-4 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-sm text-sm transition-colors duration-200"
         >
           {showJson ? "Hide" : "Show"} JSON Preview
         </button>

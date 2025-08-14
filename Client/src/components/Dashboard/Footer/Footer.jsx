@@ -10,7 +10,7 @@
 //       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 //         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 //           {/* Company Info */}
-//           <div className="space-y-4"> 
+//           <div className="space-y-4">
 //             <div className="flex space-x-4">
 //               <a href="#" className="text-blue-600 hover:text-blue-700">
 //                 <Facebook className="h-5 w-5" />
@@ -103,9 +103,19 @@
 
 // export default Footer;
 
-import React from 'react';
-import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Linkedin, Instagram, ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Instagram,
+  ChevronRight,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -114,28 +124,40 @@ const Footer = () => {
     <footer className="w-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 text-black mt-20 relative overflow-hidden">
       {/* Decorative elements */}
       {/* Decorative elements removed for consistency */}
-      
+
       <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-          
           {/* Company Info */}
           <div className="space-y-6">
             <div className="space-y-4">
-              <h2 className="text-lg font-bold  text-gray-900">Social Handles</h2>
-            
+              <h2 className="text-lg font-bold  text-gray-900">
+                Social Handles
+              </h2>
             </div>
-            
+
             <div className="flex space-x-4">
-              <a href="#" className="group bg-blue-800/70 hover:bg-blue-700/100 p-3 rounded-lg transition-all duration-300 hover:scale-110">
+              <a
+                href="#"
+                className="group bg-blue-800/70 hover:bg-blue-700/100 p-3 rounded-lg transition-all duration-300 hover:scale-110"
+              >
                 <Facebook className="h-5 w-5 text-blue-200 group-hover:text-white" />
               </a>
-              <a href="#" className="group bg-blue-800/70 hover:bg-blue-700/100 p-3 rounded-lg transition-all duration-300 hover:scale-110">
+              <a
+                href="#"
+                className="group bg-blue-800/70 hover:bg-blue-700/100 p-3 rounded-lg transition-all duration-300 hover:scale-110"
+              >
                 <Twitter className="h-5 w-5 text-blue-200 group-hover:text-white" />
               </a>
-              <a href="#" className="group bg-blue-800/70 hover:bg-blue-700/100 p-3 rounded-lg transition-all duration-300 hover:scale-110">
+              <a
+                href="#"
+                className="group bg-blue-800/70 hover:bg-blue-700/100 p-3 rounded-lg transition-all duration-300 hover:scale-110"
+              >
                 <Linkedin className="h-5 w-5 text-blue-200 group-hover:text-white" />
               </a>
-              <a href="#" className="group bg-blue-800/70 hover:bg-blue-700/100 p-3 rounded-lg transition-all duration-300 hover:scale-110">
+              <a
+                href="#"
+                className="group bg-blue-800/70 hover:bg-blue-700/100 p-3 rounded-lg transition-all duration-300 hover:scale-110"
+              >
                 <Instagram className="h-5 w-5 text-blue-200 group-hover:text-white" />
               </a>
             </div>
@@ -152,11 +174,11 @@ const Footer = () => {
                 { to: "/dashboard", label: "Dashboard" },
                 { to: "/reports", label: "Reports" },
                 { to: "/analytics", label: "Analytics" },
-                { to: "/settings", label: "Settings" }
+                { to: "/settings", label: "Settings" },
               ].map((link) => (
                 <li key={link.to}>
-                  <Link 
-                    to={link.to} 
+                  <Link
+                    to={link.to}
                     className="group flex items-center text-gray-600 hover:text-blue-600 text-sm transition-colors duration-200"
                   >
                     <ChevronRight className="h-4 w-4 mr-2 text-blue-400 group-hover:text-blue-600 transition-colors" />
@@ -178,11 +200,16 @@ const Footer = () => {
                 <div className="bg-blue-100 p-2 rounded-lg">
                   <Phone className="h-5 w-5 text-blue-600" />
                 </div>
-                <div className="text-left flex flex-wrap">
+
+                {/* flex-1 + min-w-0 allows wrapping inside a flex row */}
+                <div className="text-left flex flex-col flex-1 min-w-0">
                   <span className="font-medium text-gray-900">Phone</span>
-                  <p>+91 (+91) 3322298038/40649316/22654742/22292340</p>
+                  <div className="break-all whitespace-normal">
+                    (+91) 3322298038/40649316/22654742/22292340
+                  </div>
                 </div>
               </li>
+
               {/* <li className="flex items-start space-x-4 text-sm text-gray-600">
                 <div className="bg-blue-100 p-2 rounded-lg">
                   <Mail className="h-5 w-5 text-blue-600" />
@@ -197,8 +224,13 @@ const Footer = () => {
                   <MapPin className="h-5 w-5 text-blue-600" />
                 </div>
                 <div className="text-left">
-                  <span className="font-medium text-gray-900 block">Address</span>
-                  <p> 46B, Rafi Ahmed Kidwai Road(1st Floor),Kolkata - 700016</p>
+                  <span className="font-medium text-gray-900 block">
+                    Address
+                  </span>
+                  <p>
+                    {" "}
+                    46B, Rafi Ahmed Kidwai Road(1st Floor),Kolkata - 700016
+                  </p>
                 </div>
               </li>
             </ul>
@@ -247,11 +279,11 @@ const Footer = () => {
             {[
               { to: "/privacy", label: "Privacy Policy" },
               { to: "/terms", label: "Terms of Service" },
-              { to: "/support", label: "Support" }
+              { to: "/support", label: "Support" },
             ].map((link) => (
-              <Link 
+              <Link
                 key={link.to}
-                to={link.to} 
+                to={link.to}
                 className="text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200 hover:underline"
               >
                 {link.label}
