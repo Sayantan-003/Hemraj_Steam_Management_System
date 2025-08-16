@@ -146,8 +146,8 @@ const New_DeWaxing_Form = ({ onDataChange = () => {} }) => {
   }, [formData, crystallizer, dipGap, cloudyTanks, onDataChange]);
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-      <h2 className="text-lg font-semibold text-gray-800 mb-4 px-4 py-2 rounded-md" style={{ backgroundColor: "#FFE95B" }}>
+    <div className="bg-white rounded-xl shadow-md p-6 mb-10 mt-10">
+      <h2 className="text-xl font-bold text-gray-800 mb-4 px-4 py-2 rounded-md" style={{ backgroundColor: "#FFE95B" }}>
         De-Waxing Section
       </h2>
 

@@ -202,7 +202,7 @@ const New_DEO_Form = ({ onDataChange = () => {} }) => {
       const shiftNameOptions = getShiftNameOptions(currentShiftHour);
 
       operatorFields.push(
-        <div key={i} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div key={i} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">Operator Name</label>
             <select 
@@ -295,7 +295,7 @@ const New_DEO_Form = ({ onDataChange = () => {} }) => {
         );
       case 'FOT':
         return (
-          <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+          <div className="bg-white rounded-xl shadow-md p-6 mb-10 mt-10">
             <h3 className="text-lg font-semibold text-gray-800 mb-4 px-4 py-2 rounded-md" style={{ backgroundColor: '#FFE95B' }}>Dip/Gap Entries of Final Oil Tanks (FOT)</h3>
             {['A', 'B', 'C'].map((shift) => (
               <div key={shift} className="mb-4">
@@ -343,7 +343,7 @@ const New_DEO_Form = ({ onDataChange = () => {} }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6">
+    <div className="bg-white rounded-xl shadow-md p-6 mb-10 mt-10">
       <h2 className="text-xl font-bold text-gray-900 mb-6 px-4 py-2 rounded-md" style={{ backgroundColor: '#FFE95B' }}>DEO Section</h2>
 
       {/* Date and Operator Count */}

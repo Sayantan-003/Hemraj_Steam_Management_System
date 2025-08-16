@@ -5,7 +5,7 @@ export const createPrepLog = async (data) => {
 
   const shiftHourMap = {
     8: 1,
-    12: 1.5,
+    12: 1.5,3
     16: 2,
     24: 3,
   };

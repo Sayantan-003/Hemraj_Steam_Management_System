@@ -94,39 +94,36 @@ const New_DeGum_Bleach_Form = ({ onDataChange = () => {} }) => {
   };
 
   // Update parent whenever formData or shiftData changes
-  useEffect(() => {
-    // Update operators with latest shift data
-    const updatedOperators = formData.operators.map(operator => {
-      if (operator.shiftName) {
-        const shiftSubparts = getShiftSubparts(operator.shiftName);
-        const shifts = shiftSubparts.map(shiftName => ({
-          shiftName,
-          cotTanks: { 
-            cot3: parseInt(shiftData[shiftName].cot3) || 0, 
-            cot4: parseInt(shiftData[shiftName].cot4) || 0 
-          },
-          bleacherTanks: { 
-            bleacher1: parseInt(shiftData[shiftName].bleacher1) || 0, 
-            bleacher2: parseInt(shiftData[shiftName].bleacher2) || 0, 
-            bleacher3: parseInt(shiftData[shiftName].bleacher3) || 0 
-          }
-        }));
-        return { ...operator, shifts };
-      }
-      return operator;
-    });
+useEffect(() => {
+  const outputData = {
+    date: formData.date,
+    operators: formData.operators.map(operator => {
+      if (!operator.shiftName) return operator;
 
-    const outputData = {
-      date: formData.date,
-      operators: updatedOperators.map(op => ({
-        name: op.name,
-        shiftHours: parseInt(op.shiftHours) || 0,
-        shifts: op.shifts || []
-      }))
-    };
+      const shifts = getShiftSubparts(operator.shiftName).map(shiftName => ({
+        shiftName,
+        cotTanks: {
+          cot3: Number(shiftData[shiftName]?.cot3) || 0,
+          cot4: Number(shiftData[shiftName]?.cot4) || 0
+        },
+        bleacherTanks: {
+          bleacher1: Number(shiftData[shiftName]?.bleacher1) || 0,
+          bleacher2: Number(shiftData[shiftName]?.bleacher2) || 0,
+          bleacher3: Number(shiftData[shiftName]?.bleacher3) || 0
+        }
+      }));
 
-    onDataChange(outputData);
-  }, [formData, shiftData, onDataChange]);
+      return {
+        name: operator.name,
+        shiftHours: Number(operator.shiftHours) || 0,
+        shifts
+      };
+    })
+  };
+
+  onDataChange(outputData);
+}, [formData, shiftData, onDataChange]);
+
 
   return (
     <>
@@ -138,7 +135,7 @@ const New_DeGum_Bleach_Form = ({ onDataChange = () => {} }) => {
 
       {/* De-Gumming + Bleaching Section */}
       <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4 px-4 py-2 rounded-md" style={{ backgroundColor: '#FFE95B' }}>
+        <h2 className="text-xl font-bold text-gray-800 mb-4 px-4 py-2 rounded-md" style={{ backgroundColor: '#FFE95B' }}>
           De-Gumming + Bleaching Section
         </h2>
 

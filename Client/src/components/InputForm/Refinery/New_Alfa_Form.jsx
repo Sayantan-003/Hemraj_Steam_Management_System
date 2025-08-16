@@ -108,7 +108,7 @@ const New_Alfa_Form = ({ onDataChange = () => {} }) => {
             shiftName,
             processes: {
             },
-            washingTank: parseFloat(washingTankData[shiftLetter]) || 0
+            DGOT: parseFloat(DGOTData[shiftLetter]) || 0
           };
         });
         return { ...operator, shifts };
@@ -189,7 +189,7 @@ const New_Alfa_Form = ({ onDataChange = () => {} }) => {
 
   
 return (
-    <div className="bg-white rounded-xl shadow-md p-6">
+    <div className="bg-white rounded-xl shadow-md p-6 mb-10 mt-10">
       <h2 className="text-xl font-bold text-gray-900 mb-6 px-4 py-2 rounded-md" style={{ backgroundColor: '#FFE95B' }}>Alpha Section</h2>
 
       {/* Date and Operator Count */}
@@ -226,7 +226,7 @@ return (
 
       {/* Process Values for DGOT Tank */}
       <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4 px-4 py-2 rounded-md" style={{ backgroundColor: '#FFE95B' }}></h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-4 px-4 py-2 rounded-md" style={{ backgroundColor: '#FFE95B' }}>Dip/Gap Entries For DGOT</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {['A', 'B', 'C'].map((shift) => (
             <div key={shift}>

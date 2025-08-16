@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useState,useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import New_DeGum_Bleach_Form from "./New_DeGum_Bleach_Form";
 import New_DeWaxing_Form from "./New_DeWaxing_Form";
 import New_DEO_Form from "./New_DEO_Form";
 import New_Alpha_Form from "./New_Alfa_Form";
 
-import SuccessPage from "../../utils/SuccessPage";
 
 
 
@@ -24,21 +23,21 @@ export default function MasterRefineryForm() {
   const [showJson, setShowJson] = useState(false);
   const [showSuccessPage, setShowSuccessPage] = useState(false);
 
-  const handleDegumBleachChange = (data) => {
+  const handleDegumBleachChange = useCallback((data) => {
     setFormData(prev => ({ ...prev, degumBleach: data }));
-  };
+  },[]);
 
-  const handleAlphaChange = (data) => {
+  const handleAlphaChange = useCallback((data) => {
     setFormData(prev => ({ ...prev, alpha: data }));
-  };
+  },[]);
 
-  const handleDeoChange = (data) => {
+  const handleDeoChange = useCallback((data) => {
     setFormData(prev => ({ ...prev, deo: data }));
-  };
+  },[]);
 
-  const handleDewaxingChange = (data) => {
+  const handleDewaxingChange = useCallback((data) => {
     setFormData(prev => ({ ...prev, dewaxing: data }));
-  };
+  },[]);
 
   const handleSubmitAll = async () => {
     setLoading(true);
@@ -76,7 +75,7 @@ export default function MasterRefineryForm() {
 
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
+    <div className="max-w-6xl mx-auto p-4 mb-10 mt-10">
 
       {/* DeGum & Bleach Form */}
       <New_DeGum_Bleach_Form onDataChange={handleDegumBleachChange} />
@@ -110,7 +109,7 @@ export default function MasterRefineryForm() {
 
       {/* JSON Preview */}
       {showJson && (
-        <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+        <div className="bg-white rounded-xl shadow-md p-6 ">
           <h3 className="text-lg font-semibold text-gray-800 mb-4 px-4 py-2 rounded-md" style={{ backgroundColor: '#FFE95B' }}>
             JSON Output Preview
           </h3>
