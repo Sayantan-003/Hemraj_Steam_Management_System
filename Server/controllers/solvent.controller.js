@@ -1,50 +1,163 @@
-import DailyLog from '../models/FormSchema.js';
+import DailyLog from '../models/solvent/FormSchema.js';
+import solventService from '../service/solvent.service.js';
 
-export const createSolventLog = async (req, res) => {
+import { exportToCSV, exportToExcel } from '../utils/exportUtils.js';
+// Export dashboard data as CSV/Excel
+export const exportSolventDashboard = async (req, res) => {
   try {
-    const {
-      date,
-      operatorDetails,
-      labReport,
-      steam,
-      production
-    } = req.body;
-
-    const logs = operatorDetails.map(operator => {
-      const shiftKey = `shift${operator.shiftName}`;
-      return {
-        operator_name: operator.name,
-        shift_hours: operator.shiftHour,
-        shift_name: operator.shiftName,
-        log_date: date,
-        crude_oil_color: Object.entries(labReport[shiftKey] || {})
-          .filter(([key]) => key.includes('color'))
-          .map(([_, val]) => val),
-        crude_oil_moisture: Object.entries(labReport[shiftKey] || {})
-          .filter(([key]) => key.includes('moisture'))
-          .map(([_, val]) => val),
-        dorb_oil: Object.entries(labReport[shiftKey] || {})
-          .filter(([key]) => key.includes('dorb'))
-          .map(([_, val]) => val),
-        steam_consumed: Object.entries(steam[shiftKey] || {}).map(([_, val]) => val),
-        production: production[shiftKey] || ''
-      };
+    const { startDate, endDate, operatorName, shiftHours, metrics, format } = req.query;
+    const dashboardData = await solventService.getDashboardMetrics({
+      startDate: startDate ? new Date(startDate) : new Date(),
+      endDate: endDate ? new Date(endDate) : new Date(),
+      operatorName,
+      shiftHours
     });
 
-    const savedLogs = await DailyLog.insertMany(logs);
-    return res.status(201).json({ message: 'Logs saved successfully', data: savedLogs });
+    // Default metrics if not specified
+    const allMetrics = [
+      'crudeOilColor',
+      'crudeOilMoisture',
+      'dorbOilMoisture',
+      'steamConsumed',
+      'electricConsumedWBSEDCL',
+      'electricConsumedSolar',
+      'totalProduction'
+    ];
+    const selectedMetrics = metrics ? metrics.split(',') : allMetrics;
+
+    // Prepare data for export
+    const row = {};
+    selectedMetrics.forEach(metric => {
+      row[metric] = dashboardData.performanceParameters[metric];
+    });
+    const data = [row];
+
+    if (format === 'excel') {
+      const buffer = await exportToExcel(data, selectedMetrics);
+      res.setHeader('Content-Disposition', 'attachment; filename="solvent_dashboard.xlsx"');
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      return res.end(Buffer.from(buffer));
+    } 
   } catch (error) {
-    console.error('Error saving solvent log:', error);
+    console.error('Error exporting dashboard:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-export const getSolventDataByOperator = async (req, res) => {
-  const { name, date } = req.query;
+export const createSolventLog = async (req, res) => {
+    try {
+        const { date, operatorDetails, labReport, steam, production } = req.body;
 
-  if (!name || !date) {
-    return res.status(400).json({ error: 'name and date are required' });
-  }
+        // Transform the input data into the format expected by the service
+        const formattedData = {
+            date,
+            operators: operatorDetails.map(operator => ({
+                operatorId: operator.name,
+                totalHours: parseInt(operator.shiftHour),
+                shifts: [operator.shiftName]
+            })),
+            labReports: operatorDetails.map(operator => {
+                const shiftKey = `shift${operator.shiftName}`;
+                return {
+                    shiftId: operator.shiftName,
+                    color: labReport[shiftKey]?.color || 0,
+                    moisture: labReport[shiftKey]?.moisture || 0,
+                    dorb: labReport[shiftKey]?.dorb || 0
+                };
+            }),
+            steamReadings: operatorDetails.map(operator => {
+                const shiftKey = `shift${operator.shiftName}`;
+                return {
+                    shiftId: operator.shiftName,
+                    opening: steam[shiftKey]?.opening || 0,
+                    closing: steam[shiftKey]?.closing || 0
+                };
+            }),
+            totalProduction: Object.values(production).reduce((total, current) => total + (parseFloat(current) || 0), 0)
+        };
+
+        // Save using the service
+        const savedLog = await solventService.createDailyLog(formattedData);
+        return res.status(201).json({ 
+            message: 'Log saved successfully', 
+            data: savedLog 
+        });
+    } catch (error) {
+        console.error('Error saving solvent log:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const getSolventDashboardData = async (req, res) => {
+    try {
+        const { startDate, endDate, operatorName, shiftHours } = req.query;
+        
+        const dashboardData = await solventService.getDashboardMetrics({
+            startDate: startDate ? new Date(startDate) : new Date(),
+            endDate: endDate ? new Date(endDate) : new Date(),
+            operatorName,
+            shiftHours
+        });
+
+        return res.status(200).json(dashboardData);
+    } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const getSolventPerformanceHistory = async (req, res) => {
+    try {
+        const { startDate, endDate, operatorName, metric } = req.query;
+        
+        const performanceData = await solventService.getPerformanceHistory({
+            startDate: new Date(startDate),
+            endDate: new Date(endDate),
+            operatorName,
+            metric
+        });
+
+        return res.status(200).json(performanceData);
+    } catch (error) {
+        console.error('Error fetching performance history:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const getAvailableOperators = async (req, res) => {
+    try {
+        const { startDate, endDate } = req.query;
+        const operators = await solventService.getOperatorsForDateRange(
+            startDate || new Date(),
+            endDate || new Date()
+        );
+        res.json(operators);
+    } catch (error) {
+        console.error('Error fetching operators:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const getShiftDetails = async (req, res) => {
+    try {
+        const { startDate, endDate } = req.query;
+        const shiftDetails = await solventService.getShiftDetailsForDateRange(
+            startDate || new Date(),
+            endDate || new Date()
+        );
+        res.json(shiftDetails);
+    } catch (error) {
+        console.error('Error fetching shift details:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const getSolventDataByOperator = async (req, res) => {
+    const { name, date } = req.query;
+
+    if (!name || !date) {
+        return res.status(400).json({ error: 'name and date are required' });
+    }
 
   try {
     const startOfDay = new Date(date);

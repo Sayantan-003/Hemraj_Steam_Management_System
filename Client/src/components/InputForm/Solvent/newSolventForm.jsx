@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import OperatorSection from "./OperatorSection";
 import LabReportSection from "./LabReportSection";
 import SteamSection from "./SteamSection";
@@ -34,11 +34,66 @@ const NewSolventForm = () => {
     setProduction(prev => ({ ...prev, [shift]: value }));
   };
 
-  const handleSubmit = () => {
-    const payload = { date, operatorDetails, labReport, steam, production };
-    console.log("Submitting:", payload);
-    // You can POST this payload to Express backend
+  const [submitStatus, setSubmitStatus] = useState({ loading: false, error: null, success: false });
+
+  const handleSubmit = async () => {
+    // Validate required fields
+    if (!date) {
+      setSubmitStatus({ loading: false, error: "Please select a date", success: false });
+      return;
+    }
+
+    if (!operatorDetails[0].name || !operatorDetails[0].shiftHour || !operatorDetails[0].shiftName) {
+      setSubmitStatus({ loading: false, error: "Please fill operator details", success: false });
+      return;
+    }
+
+    try {
+      setSubmitStatus({ loading: true, error: null, success: false });
+      
+      const payload = { date, operatorDetails, labReport, steam, production };
+      console.log("Submitting payload:", payload);
+
+      const response = await fetch('/api/solvent/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to save data');
+      }
+
+      console.log("Server response:", data);
+      setSubmitStatus({ loading: false, error: null, success: true });
+
+      // Clear form after successful submission
+      setDate("");
+      setOperatorDetails([{ name: "", shiftHour: "", shiftName: "" }]);
+      setNumOperators(1);
+      setLabReport({ shiftA: {}, shiftB: {}, shiftC: {} });
+      setSteam({ shiftA: {}, shiftB: {}, shiftC: {} });
+      setProduction({ shiftA: "", shiftB: "", shiftC: "" });
+
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setSubmitStatus({ loading: false, error: error.message, success: false });
+    }
   };
+
+  useEffect(()=>{
+    setOperatorDetails((prev) => {
+      const updated = [...prev];
+      while (updated.length < numOperators){
+        updated.push({ name:"", shiftHour: "", shiftName: ""});
+      }
+      return updated.slice (0, numOperators);
+    });
+  }, [numOperators]);
 
   return (
   <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 py-6 px-4">
@@ -58,8 +113,26 @@ const NewSolventForm = () => {
       <LabReportSection labReport={labReport} onChange={handleLabChange} />
       <SteamSection steam={steam} onChange={handleSteamChange} />
       <ProductionSection production={production} onChange={handleProductionChange} />
-      <div className="text-center">
-        <button onClick={handleSubmit} className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600">Submit</button>
+      <div className="text-center space-y-4">
+        {submitStatus.error && (
+          <div className="text-red-600 bg-red-50 p-3 rounded">
+            {submitStatus.error}
+          </div>
+        )}
+        {submitStatus.success && (
+          <div className="text-green-600 bg-green-50 p-3 rounded">
+            Data saved successfully!
+          </div>
+        )}
+        <button 
+          onClick={handleSubmit} 
+          disabled={submitStatus.loading}
+          className={`bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600 \${
+            submitStatus.loading ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+        >
+          {submitStatus.loading ? 'Saving...' : 'Submit'}
+        </button>
       </div>
     </div>
   </div>
